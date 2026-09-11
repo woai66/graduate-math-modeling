@@ -1,0 +1,39 @@
+# Obsidian / 编辑器
+.obsidian/
+.vscode/
+.idea/
+*.swp
+
+# 操作系统与临时文件
+Thumbs.db
+Desktop.ini
+~$*
+*.tmp
+*.bak
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+
+# MATLAB
+*.asv
+*.mex*
+matlab_crash_dump.*
+
+# 本地数据、压缩包与生成结果（需要共享时请先确认来源和体积）
+*.zip
+*.rar
+*.7z
+*.mat
+*.xls
+*.xlsx
+data/local/
+results/local/
+
+# 密钥与本地配置
+.env
+.env.*
+!.env.example
