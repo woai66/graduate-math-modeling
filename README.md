@@ -190,6 +190,7 @@
 仓库使用 [uv](https://docs.astral.sh/uv/) 管理 Python 依赖，版本和锁定结果分别记录在 `pyproject.toml` 与 `uv.lock`。首次配置环境：
 
 ```powershell
+$env:UV_CACHE_DIR = "$env:TEMP\\uv-cache-codex"
 uv venv .venv --python 3.13
 uv sync
 ```
