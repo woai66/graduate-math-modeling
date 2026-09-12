@@ -10,6 +10,7 @@ import re
 from pathlib import Path
 
 import numpy as np
+import cv2
 from PIL import Image, ImageDraw, ImageFont
 
 
@@ -60,9 +61,27 @@ def save_mask(edge: np.ndarray, path: Path) -> tuple[float, int]:
     return float(mask.mean()), components
 
 
+def enhanced_mask(gray: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+    """用 CLAHE、双边滤波、自适应阈值和形态学得到较稳健的候选掩膜。"""
+    image = np.clip(gray, 0, 255).astype(np.uint8)
+    clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
+    enhanced = clahe.apply(image)
+    filtered = cv2.bilateralFilter(enhanced, 5, 35, 35)
+    edges = cv2.Canny(filtered, 35, 110)
+    kernel = np.ones((3, 3), np.uint8)
+    mask = cv2.morphologyEx(edges, cv2.MORPH_CLOSE, kernel, iterations=1)
+    mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel, iterations=1)
+    return mask > 0, enhanced
+
+
 def fit_sine(gray: np.ndarray) -> tuple[float, float, float, float]:
     height, width = gray.shape
-    y = np.argmin(gray, axis=0).astype(float)
+    smoothed = cv2.GaussianBlur(np.clip(gray, 0, 255).astype(np.uint8), (5, 5), 0)
+    edge = cv2.Canny(smoothed, 35, 110)
+    y = np.empty(width, dtype=float)
+    for x_index in range(width):
+        candidates = np.where(edge[:, x_index] > 0)[0]
+        y[x_index] = float(np.median(candidates)) if candidates.size else float(np.argmin(smoothed[:, x_index]))
     x = np.arange(width, dtype=float)
     omega = 2 * math.pi / width
     design = np.column_stack((np.sin(omega * x), np.cos(omega * x), np.ones(width)))
@@ -77,7 +96,8 @@ def fit_sine(gray: np.ndarray) -> tuple[float, float, float, float]:
 
 
 def roughness(gray: np.ndarray, sample_count: int) -> tuple[float, float]:
-    edge = edge_strength(gray)
+    smoothed = cv2.GaussianBlur(np.clip(gray, 0, 255).astype(np.uint8), (5, 5), 0).astype(np.float32)
+    edge = edge_strength(smoothed)
     height, width = gray.shape
     x_pixels = np.linspace(0, width - 1, sample_count).astype(int)
     y_pixels = np.argmax(edge[:, x_pixels], axis=0).astype(float)
@@ -101,8 +121,12 @@ def question_one() -> None:
     for path in sorted((ROOT / "附件1").glob("*.jpg"), key=natural_key):
         gray = gray_array(path)
         edge = edge_strength(gray)
-        coverage, components = save_mask(edge, FIG / "result" / f"q1_{path.stem}_mask.png")
-        rows.append({"image": path.name, "height": gray.shape[0], "width": gray.shape[1], "edge_threshold": round(float(np.percentile(edge, 90)), 4), "edge_coverage": round(coverage, 6), "components_downsampled": components})
+        mask, _ = enhanced_mask(gray)
+        image = Image.fromarray(np.where(mask, 0, 255).astype(np.uint8))
+        image.save(FIG / "result" / f"q1_{path.stem}_mask.png")
+        coverage, components = save_mask(edge, FIG / "process" / f"q1_{path.stem}_raw_edge.png")
+        enhanced_coverage = float(mask.mean())
+        rows.append({"image": path.name, "height": gray.shape[0], "width": gray.shape[1], "edge_threshold": round(float(np.percentile(edge, 90)), 4), "edge_coverage": round(enhanced_coverage, 6), "components_downsampled": components})
     write_csv(OUT / "q1_segmentation_summary.csv", rows)
 
 
