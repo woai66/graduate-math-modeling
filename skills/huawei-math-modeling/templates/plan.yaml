@@ -1,0 +1,16 @@
+competition: ""
+edition: ""
+problem: ""
+project_root: ""
+official_rules:
+  status: TODO
+  source: ""
+  sha256: ""
+stages:
+  problem_reading: {status: TODO, owner: modeler, outputs: []}
+  data_analysis: {status: TODO, owner: coder, outputs: []}
+  modeling: {status: TODO, owner: modeler, outputs: []}
+  validation: {status: TODO, owner: coder, outputs: []}
+  paper: {status: TODO, owner: writer, outputs: []}
+  independent_review: {status: TODO, owner: reviewer, outputs: []}
+  submission_package: {status: TODO, owner: coordinator, outputs: []}
