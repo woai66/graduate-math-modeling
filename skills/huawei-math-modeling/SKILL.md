@@ -28,6 +28,8 @@ metadata:
 | 参数、验证、敏感性 | `references/quality-gates.md` | 验证表、对比实验、敏感性结果 |
 | 写中文论文 | `references/paper-style.md` | Markdown 草稿或 `基线实验报告.docx` |
 | 检查 Word 论文 | `references/docx-checks.md` | 检查报告和待修复清单 |
+| 评估优秀论文质量 | `references/excellent-paper-rubric.md` | 评分表、红线项和定向修改清单 |
+| 阶段交接与独立验收 | `references/stage-contracts.md`、`references/evidence-chain.md` | 状态、结果契约、证据矩阵和审查报告 |
 
 需要处理 PDF、DOCX、XLSX、绘图或 LaTeX 时，先读取目标格式对应的工具 Skill，再执行其脚本和渲染检查。
 
@@ -62,6 +64,10 @@ Skill 内置脚本从 `SKILL_ROOT/scripts/` 调用；项目代码、结果、报
 4. `results/复现清单.json`：输入文件哈希、随机种子、环境、参数和唯一运行命令。
 5. 中文论文草稿；只有通过参赛交付门禁后，才能生成 `完整论文.docx`，并运行 DOCX 检查脚本。
 
+正式流程必须维护 `plan.md`、`todo.md`、`stage_status.json` 和 `reports/evidence_matrix.csv`。阶段顺序为：`problem_reading → data_analysis → modeling → validation → paper → independent_review → submission_package`。后阶段不能绕过前阶段的 `PASSED` 状态。
+
+新题目开始时，从 `templates/` 复制 `plan.yaml`、`stage_status.json`、`result_contract.json`、`evidence_matrix.csv` 和 `todo.md` 到项目根目录或题目子目录；每个子问题各维护一份 `result_contract.json`。模型、代码和论文交接以这些文件为准，不能只依赖聊天上下文。
+
 ### 交付级别门禁
 
 - **实验报告**：允许使用基线、启发式方法和未标定指标，但文件必须命名为 `基线实验报告.docx` 或类似名称，并在首页明确写出“不可直接提交”。
@@ -69,6 +75,8 @@ Skill 内置脚本从 `SKILL_ROOT/scripts/` 调用；项目代码、结果、报
 - **参赛候选稿**：只有在当届官方规则已核验、每个子问题的真实结果和要求附件已生成、代码/公式/图表/结论一致、参考文献可追溯、独立质量检查通过后，才允许命名为 `完整论文.docx`。
 
 缺少任一条件时，必须停止在较低交付级别；不能用“基线”“示意图”或“后续改进方向”替代缺失的竞赛结果。
+
+正式论文候选稿还必须通过 `references/excellent-paper-rubric.md` 的 100 分评分表：硬门禁全部通过且评分至少 85 分；90 分以上才可标记为优秀候选。任何核心模型或验证项不足、摘要数字无证据、题目要求附件缺失、官方格式未核验，立即降级为草稿。
 
 所有结论必须来自实际运行结果。缺少数据、官方规则、环境或验证证据时，明确标记阻塞，不编造结果、引用、图表或参数。
 
