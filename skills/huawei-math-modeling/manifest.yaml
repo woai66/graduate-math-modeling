@@ -1,0 +1,59 @@
+version: 0.1.0
+name: huawei-math-modeling
+language: zh-CN
+scope: 中国研究生数学建模竞赛（华为杯）
+source_materials:
+  - 2023—2025 年赛题分类与项目根目录 README.md
+  - 本地 2025 优秀论文和重点学习优秀论文的结构抽查
+  - 视频第 9 集 Huawei-math-modeling v0.2.3 的阶段路由
+  - woai66/math-modeling-skill 与 jihe520/MathModelAgent 的公开工作流设计
+stages:
+  problem_reading:
+    load:
+      - references/problem-routing.md
+    outputs:
+      - 题目分析报告.md
+      - 模型候选与选型.md
+      - 数据字典.md
+  data_analysis:
+    load:
+      - references/data-analysis.md
+    outputs:
+      - 数据清洗记录.md
+      - figures/raw/
+      - figures/process/
+  modeling:
+    load:
+      - references/algorithm-catalog.md
+    outputs:
+      - 模型说明.md
+      - code/
+      - results/
+  validation:
+    load:
+      - references/quality-gates.md
+    outputs:
+      - results/复现清单.json
+      - VERIFY_REPORT.md
+  paper:
+    load:
+      - references/paper-style.md
+      - references/docx-checks.md
+    outputs:
+      - paper/
+      - 完整论文.docx
+tools:
+  repro_manifest: scripts/build_repro_manifest.py
+  docx_typography: scripts/verify_docx_typography.py
+  docx_math: scripts/verify_docx_math.py
+  docx_figures: scripts/verify_docx_figures.py
+gates:
+  required:
+    - 每个子问题有模型、参数、结果和验证
+    - 代码、图表、公式和结论一致
+    - 输入哈希和运行命令已记录
+    - 无占位符、密钥、个人信息和内部绝对路径
+  enhanced:
+    - 敏感性或鲁棒性分析
+    - 替代模型或基线对比
+    - DOCX/PDF 结构和视觉检查
