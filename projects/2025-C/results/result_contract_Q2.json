@@ -1,0 +1,14 @@
+{
+  "question": "Q2",
+  "status": "TODO",
+  "sample_coverage": {"required": 10, "processed": 0},
+  "code_entry": "code/q2_sine_fit.py",
+  "input_files": [],
+  "parameters": {"period_constraint": "接近钻孔周长 94.25 mm"},
+  "outputs": {"tables": [], "figures": [], "attachments": []},
+  "metrics": ["R2", "RMSE", "parameter_stability"],
+  "validation": [],
+  "seed": null,
+  "runtime_seconds": null,
+  "run_id": ""
+}
