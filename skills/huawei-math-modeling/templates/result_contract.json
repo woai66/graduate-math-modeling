@@ -1,0 +1,14 @@
+{
+  "question": "问题1",
+  "status": "TODO",
+  "sample_coverage": {"required": 0, "processed": 0},
+  "code_entry": "",
+  "input_files": [],
+  "parameters": {},
+  "outputs": {"tables": [], "figures": [], "attachments": []},
+  "metrics": [],
+  "validation": [],
+  "seed": null,
+  "runtime_seconds": null,
+  "run_id": ""
+}

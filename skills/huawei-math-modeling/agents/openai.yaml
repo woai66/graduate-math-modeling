@@ -1,4 +1,4 @@
 interface:
   display_name: "Huawei Cup Math Modeling"
-  short_description: "�����й��о�����ѧ��ģ��������Ŀ��������ģ����֤�����Ľ���"
-  default_prompt: "�밴��Ϊ���������̷�����Ŀ�����ɿɸ��ִ��롢ͼ�������Ĳݸ壬�����عٷ����������ϱ߽硣"
+  short_description: "面向中国研究生数学建模竞赛的题目分析、建模、验证与论文交付"
+  default_prompt: "请按华为杯研赛流程分析题目，生成可复现代码、图表和论文草稿，并遵守官方规则与资料边界。"

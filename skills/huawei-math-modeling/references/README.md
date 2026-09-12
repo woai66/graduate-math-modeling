@@ -8,5 +8,10 @@
 - `paper-style.md`：结合 2025 优秀论文提炼的中文论文结构和格式
 - `quality-gates.md`：基础门禁、增强检查和返工规则
 - `docx-checks.md`：Word 检查脚本入口
+- `excellent-paper-rubric.md`：优秀论文 100 分评分表和红线项
+- `stage-contracts.md`：建模、编程、论文和独立审查阶段合同
+- `evidence-chain.md`：主张、结果、图表、代码和引用的证据绑定
+- `paper-outline.md`：逐问闭环的正式论文大纲
+- `official-rules-checklist.md`：当届官方规则与提交包核验
 
 算法方法来自项目资料库中的 MATLAB/Python 示例，题型趋势来自 2023—2025 年华为杯研赛题目统计，论文格式来自本地优秀论文抽查。开源项目和视频只作为流程设计参考，不能替代当届官方规则。
