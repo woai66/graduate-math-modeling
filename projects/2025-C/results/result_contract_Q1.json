@@ -1,0 +1,14 @@
+{
+  "question": "Q1",
+  "status": "TODO",
+  "sample_coverage": {"required": 10, "processed": 0},
+  "code_entry": "code/q1_segmentation.py",
+  "input_files": [],
+  "parameters": {},
+  "outputs": {"tables": [], "figures": [], "attachments": []},
+  "metrics": ["IoU", "Dice", "Precision", "Recall"],
+  "validation": [],
+  "seed": null,
+  "runtime_seconds": null,
+  "run_id": ""
+}

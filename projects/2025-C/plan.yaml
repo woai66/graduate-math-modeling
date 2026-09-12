@@ -1,0 +1,16 @@
+competition: "中国研究生数学建模竞赛（华为杯）"
+edition: "2025"
+problem: "C题 围岩裂隙精准识别与三维模型重构"
+project_root: "F:/goodstudy/zyq的知识库/20_学习/研究生数模竞赛/projects/2025-C"
+official_rules:
+  status: PARTIAL
+  source: "题面提交说明；当届官方通知和模板仍需补充"
+  sha256: "73ABF9EAB5EA39A9FDEC86C0D61E215366FE85835E2B7359E48ED83F526F998D"
+stages:
+  problem_reading: {status: TODO, owner: modeler, outputs: []}
+  data_analysis: {status: TODO, owner: coder, outputs: []}
+  modeling: {status: TODO, owner: modeler, outputs: []}
+  validation: {status: TODO, owner: coder, outputs: []}
+  paper: {status: TODO, owner: writer, outputs: []}
+  independent_review: {status: TODO, owner: reviewer, outputs: []}
+  submission_package: {status: TODO, owner: coordinator, outputs: []}

@@ -1,0 +1,14 @@
+{
+  "question": "Q4",
+  "status": "TODO",
+  "sample_coverage": {"required": 40, "processed": 0},
+  "code_entry": "code/q4_connectivity.py",
+  "input_files": [],
+  "parameters": {"neighbor_pairs": 7, "supplementary_sites": 3},
+  "outputs": {"tables": [], "figures": [], "attachments": []},
+  "metrics": ["matching_error", "probability_calibration", "coverage_cost"],
+  "validation": [],
+  "seed": null,
+  "runtime_seconds": null,
+  "run_id": ""
+}

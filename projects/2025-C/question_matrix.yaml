@@ -1,0 +1,43 @@
+problem: "2025 C题 围岩裂隙精准识别与三维模型重构"
+source: "official_rules_snapshot.md"
+questions:
+  - id: Q1
+    title: "基于像素分类的裂隙智能识别"
+    input: "附件1，10张 244×1350 像素钻孔成像展开图及题面标注信息"
+    output: "同尺寸二值裂隙图，裂隙黑色、其他区域白色"
+    primary_type: "分类识别"
+    models: ["像素分割基线", "U-Net类分割（候选）"]
+    metrics: ["IoU", "Dice/F1", "Precision", "Recall"]
+    figures: ["原图与标注", "预处理对比", "分割结果", "混淆矩阵或指标图"]
+    code_entry: "projects/2025-C/code/q1_segmentation.py"
+    status: TODO
+  - id: Q2
+    title: "正弦状裂隙的定量分析建模"
+    input: "附件2，10张 244×1350 像素图像"
+    output: "每条裂隙的 R、P、β、C 及表1"
+    primary_type: "几何拟合"
+    models: ["连通域/DBSCAN聚类", "鲁棒正弦拟合"]
+    metrics: ["R²", "RMSE", "参数稳定性"]
+    figures: ["图2-1至图2-3处理过程", "聚类结果", "拟合曲线"]
+    code_entry: "projects/2025-C/code/q2_sine_fit.py"
+    status: TODO
+  - id: Q3
+    title: "复杂裂隙的定量分析建模"
+    input: "附件3，11张 244×1350 像素图像"
+    output: "轮廓坐标、Z₂、JRC、采样方法比较及表2"
+    primary_type: "几何统计"
+    models: ["轮廓提取", "JRC采样敏感性模型"]
+    metrics: ["JRC", "采样稳定性", "面积关联"]
+    figures: ["轮廓提取", "采样点对比", "JRC敏感性"]
+    code_entry: "projects/2025-C/code/q3_jrc.py"
+    status: TODO
+  - id: Q4
+    title: "多钻孔裂隙网络的连通性分析与三维重构"
+    input: "附件4，6孔40个分段图像及孔口/孔底坐标"
+    output: "连通概率、三维结构图、高不确定性区域、3个补孔位置"
+    primary_type: "图论与优化"
+    models: ["几何候选匹配", "概率图与不确定性选点"]
+    metrics: ["匹配误差", "概率校准", "覆盖收益/成本"]
+    figures: ["钻孔空间布置", "裂隙网络", "补孔候选比较"]
+    code_entry: "projects/2025-C/code/q4_connectivity.py"
+    status: TODO

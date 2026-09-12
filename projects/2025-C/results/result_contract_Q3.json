@@ -1,0 +1,14 @@
+{
+  "question": "Q3",
+  "status": "TODO",
+  "sample_coverage": {"required": 11, "processed": 0},
+  "code_entry": "code/q3_jrc.py",
+  "input_files": [],
+  "parameters": {"sampling_methods": ["uniform", "curvature_adaptive"]},
+  "outputs": {"tables": [], "figures": [], "attachments": []},
+  "metrics": ["JRC", "sampling_stability", "area_effect"],
+  "validation": [],
+  "seed": null,
+  "runtime_seconds": null,
+  "run_id": ""
+}
