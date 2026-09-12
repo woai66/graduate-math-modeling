@@ -16,7 +16,7 @@ from docx.shared import Cm, Inches, Pt, RGBColor
 ROOT = Path(__file__).resolve().parents[1]
 RESULTS = ROOT / "results"
 FIGURES = ROOT / "figures" / "result"
-OUTPUT = ROOT / "完整论文.docx"
+OUTPUT = ROOT / "基线实验报告.docx"
 
 
 def read_csv(name: str) -> list[dict[str, str]]:
@@ -166,7 +166,7 @@ def main() -> None:
     title.add_run("2025 年中国研究生数学建模竞赛 C 题\n围岩裂隙精准识别与三维模型重构")
     subtitle = doc.add_paragraph()
     subtitle.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    subtitle.add_run("基于 OpenCV、NumPy 与 Pillow 的可复现增强基线实验报告").italic = True
+    subtitle.add_run("基于 OpenCV、NumPy 与 Pillow 的增强基线实验报告 不可直接提交").italic = True
     doc.add_paragraph()
 
     doc.add_heading("摘要", level=1)
