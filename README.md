@@ -185,6 +185,24 @@
 5. **敏感性分析**：检查参数变化、误差传播和模型适用范围。
 6. **论文写作**：同步整理图表、结论、局限性和参考文献，避免最后集中返工。
 
+## Python 环境
+
+仓库使用 [uv](https://docs.astral.sh/uv/) 管理 Python 依赖，版本和锁定结果分别记录在 `pyproject.toml` 与 `uv.lock`。首次配置环境：
+
+```powershell
+uv venv .venv --python 3.13
+uv sync
+```
+
+运行脚本时使用项目虚拟环境：
+
+```powershell
+uv run python reports/2025-C/code/run_baseline.py
+uv run python reports/2025-C/code/make_report_figures.py
+```
+
+当前环境包含 NumPy、Pandas、Pillow、OpenCV、SciPy、scikit-learn、Matplotlib、Seaborn、NetworkX、Statsmodels、OpenPyXL、python-docx 和 Jupyter。
+
 ## 协作约定
 
 - 一个题目或一个功能使用一个分支，提交信息采用 `feat`、`fix`、`docs`、`refactor`、`test`、`chore` 前缀。
