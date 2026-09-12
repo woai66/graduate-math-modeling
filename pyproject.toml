@@ -1,0 +1,23 @@
+[project]
+name = "graduate-math-modeling"
+version = "0.1.0"
+description = "中国研究生数学建模竞赛的代码、数据分析与论文工具"
+requires-python = ">=3.11"
+dependencies = [
+    "numpy>=2.0",
+    "pandas>=2.2",
+    "pillow>=10.0",
+    "opencv-python>=4.10",
+    "scipy>=1.14",
+    "scikit-learn>=1.5",
+    "matplotlib>=3.9",
+    "seaborn>=0.13",
+    "networkx>=3.3",
+    "statsmodels>=0.14",
+    "openpyxl>=3.1",
+    "python-docx>=1.1",
+    "jupyter>=1.1",
+]
+
+[tool.uv]
+package = false
