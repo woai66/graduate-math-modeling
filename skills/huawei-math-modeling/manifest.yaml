@@ -41,7 +41,7 @@ stages:
       - references/docx-checks.md
     outputs:
       - paper/
-      - 完整论文.docx
+      - 论文草稿.md 或 基线实验报告.docx
 tools:
   repro_manifest: scripts/build_repro_manifest.py
   docx_typography: scripts/verify_docx_typography.py
