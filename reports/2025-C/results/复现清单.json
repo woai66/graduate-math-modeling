@@ -1,0 +1,19 @@
+{
+  "created_at_utc": "2026-09-12T11:52:00.020667+00:00",
+  "python": "3.13.13 (tags/v3.13.13:01104ce, Apr  7 2026, 19:25:48) [MSC v.1944 64 bit (AMD64)]",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "seed": 0,
+  "command": "python reports/2025-C/code/run_baseline.py; python reports/2025-C/code/make_report_figures.py",
+  "inputs": [
+    {
+      "path": "F:\\goodstudy\\研0\\竞赛\\数模\\2026华为杯研究生数学建模资料\\【华为杯研究生数模04-25年赛题题目】\\2025年年中国研究生数学建模竞赛赛题\\C题-数据集.7z",
+      "sha256": "6063c064d17a66775a0129fd3d699934286951f77c4e4144ff263f2180626f92",
+      "bytes": 39348630
+    },
+    {
+      "path": "reports\\2025-C\\code\\run_baseline.py",
+      "sha256": "4b0b373d3697a4b4a6dd498822b74b24af71f6fdea4321cc53d6f66a90d192e8",
+      "bytes": 8136
+    }
+  ]
+}
