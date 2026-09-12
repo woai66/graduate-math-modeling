@@ -42,11 +42,27 @@ stages:
     outputs:
       - paper/
       - 论文草稿.md 或 基线实验报告.docx
+  independent_review:
+    load:
+      - references/excellent-paper-rubric.md
+      - references/stage-contracts.md
+      - references/evidence-chain.md
+    outputs:
+      - REVIEW_REPORT.md
+      - VERIFY_REPORT.md
+  submission_package:
+    load:
+      - references/official-rules-checklist.md
+      - references/quality-gates.md
+    outputs:
+      - submission_package/
 tools:
   repro_manifest: scripts/build_repro_manifest.py
   docx_typography: scripts/verify_docx_typography.py
   docx_math: scripts/verify_docx_math.py
   docx_figures: scripts/verify_docx_figures.py
+  stage_gate: scripts/check_stage_gate.py
+  submission_readiness: scripts/verify_submission_readiness.py
 gates:
   required:
     - 每个子问题有模型、参数、结果和验证
