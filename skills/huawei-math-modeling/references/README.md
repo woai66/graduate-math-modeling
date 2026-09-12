@@ -1,6 +1,6 @@
 # Huawei Cup Math Modeling Skill 参考资料
 
-这些文件按任务阶段渐进加载，由根目录 `SKILL.md` 路由：
+这些文件按任务阶段渐进加载，由根目录 `SKILL.md` 和 `manifest.yaml` 路由：
 
 - `problem-routing.md`：题目卡、子问题拆解和题型路由
 - `data-analysis.md`：数据检查、防泄漏规则和图表约定

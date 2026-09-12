@@ -1,6 +1,9 @@
 ---
 name: huawei-math-modeling
 description: 面向中国研究生数学建模竞赛（“华为杯”）的题目拆解、数据分析、模型选择、可复现代码、图表验证和中文论文交付。用户处理研赛题目、附件、代码、优秀论文或完整论文时使用；普通数学题和与竞赛无关的学术写作不触发。
+metadata:
+  version: 0.1.0
+  source_of_truth: skills/huawei-math-modeling
 ---
 
 # Huawei Cup Math Modeling
@@ -15,7 +18,7 @@ description: 面向中国研究生数学建模竞赛（“华为杯”）的题�
 
 ## 阶段路由
 
-根据用户目标只加载当前需要的参考文件，不一次性读取整套资料：
+根据用户目标只加载当前需要的参考文件，不一次性读取整套资料；完整路由见同目录 `manifest.yaml`：
 
 | 当前目标 | 先读的参考文件 | 最小交付物 |
 | --- | --- | --- |
@@ -27,6 +30,8 @@ description: 面向中国研究生数学建模竞赛（“华为杯”）的题�
 | 检查 Word 论文 | `references/docx-checks.md` | 检查报告和待修复清单 |
 
 需要处理 PDF、DOCX、XLSX、绘图或 LaTeX 时，先读取目标格式对应的工具 Skill，再执行其脚本和渲染检查。
+
+Skill 内置脚本从 `SKILL_ROOT/scripts/` 调用；项目代码、结果、报告和论文只写入 `PROJECT_ROOT`。除非用户明确要求，不要把 Skill 参考文件复制或修改到项目中。
 
 ## 题型判断与选模
 
