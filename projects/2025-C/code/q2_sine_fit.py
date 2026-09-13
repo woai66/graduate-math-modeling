@@ -46,6 +46,8 @@ def fit_cluster(points: np.ndarray, width: int, height: int) -> dict[str, float]
         "C_mm": intercept,
         "RMSE_mm": float(np.sqrt(np.mean(residual * residual))),
         "R2": 1 - ss_res / ss_tot if ss_tot else 0.0,
+        "x_span_px": float(x_px.max() - x_px.min()),
+        "y_span_px": float(y_px.max() - y_px.min()),
     }
 
 
@@ -60,13 +62,13 @@ def main() -> None:
         if len(points) == 0:
             continue
         scaled = points.astype(float) / np.array([gray.shape[1], gray.shape[0]])
-        labels = DBSCAN(eps=0.025, min_samples=18, n_jobs=-1).fit_predict(scaled)
+        labels = DBSCAN(eps=0.055, min_samples=20, n_jobs=-1).fit_predict(scaled)
         cluster_id = 0
         for label in sorted(set(labels)):
             if label < 0:
                 continue
             cluster = points[labels == label]
-            if len(cluster) < 30:
+            if len(cluster) < 80:
                 continue
             try:
                 fit = fit_cluster(cluster, gray.shape[1], gray.shape[0])
@@ -75,6 +77,12 @@ def main() -> None:
             fit.update({"image": path.name, "cluster": cluster_id})
             rows.append(fit)
             cluster_id += 1
+    selected: list[dict[str, object]] = []
+    for image in sorted({str(row["image"]) for row in rows}):
+        candidates = [row for row in rows if row["image"] == image]
+        candidates.sort(key=lambda row: float(row["R2"]), reverse=True)
+        selected.extend(candidates[:3])
+    rows = selected
     if not rows:
         raise RuntimeError("no clusters fitted")
     with (RESULTS / "q2_cluster_sine_results.csv").open("w", newline="", encoding="utf-8-sig") as handle:
