@@ -1,14 +1,36 @@
 {
   "question": "Q1",
-  "status": "TODO",
-  "sample_coverage": {"required": 10, "processed": 0},
+  "status": "PARTIAL",
+  "sample_coverage": {
+    "required": 10,
+    "processed": 10
+  },
   "code_entry": "code/q1_segmentation.py",
-  "input_files": [],
+  "input_files": [
+    "C:/Users/zyq/AppData/Local/Temp/huawei-c-test2/C题/附件1"
+  ],
   "parameters": {},
-  "outputs": {"tables": [], "figures": [], "attachments": []},
-  "metrics": ["IoU", "Dice", "Precision", "Recall"],
-  "validation": [],
+  "outputs": {
+    "tables": [
+      "results/q1_candidate_summary.csv"
+    ],
+    "figures": [
+      "figures/result/q1_*_candidate.png"
+    ],
+    "attachments": [
+      "10张同尺寸候选二值图"
+    ]
+  },
+  "metrics": [
+    "IoU",
+    "Dice",
+    "Precision",
+    "Recall"
+  ],
+  "validation": [
+    "无独立像素标签，监督指标阻断"
+  ],
   "seed": null,
-  "runtime_seconds": null,
-  "run_id": ""
+  "runtime_seconds": 2.1,
+  "run_id": "q1-20260913-candidate-v1"
 }
