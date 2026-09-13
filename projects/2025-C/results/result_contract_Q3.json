@@ -1,14 +1,34 @@
 {
   "question": "Q3",
-  "status": "TODO",
-  "sample_coverage": {"required": 11, "processed": 0},
+  "status": "PARTIAL",
+  "sample_coverage": {
+    "required": 11,
+    "processed": 11
+  },
   "code_entry": "code/q3_jrc.py",
   "input_files": [],
-  "parameters": {"sampling_methods": ["uniform", "curvature_adaptive"]},
-  "outputs": {"tables": [], "figures": [], "attachments": []},
-  "metrics": ["JRC", "sampling_stability", "area_effect"],
-  "validation": [],
+  "parameters": {
+    "sampling_methods": [
+      "uniform",
+      "curvature_adaptive"
+    ]
+  },
+  "outputs": {
+    "tables": [
+      "results/q3_jrc_results.csv"
+    ],
+    "figures": [],
+    "attachments": []
+  },
+  "metrics": [
+    "JRC",
+    "sampling_stability",
+    "area_effect"
+  ],
+  "validation": [
+    "基线结果，待独立审查"
+  ],
   "seed": null,
   "runtime_seconds": null,
-  "run_id": ""
+  "run_id": "q3-20260913-jrc-v2"
 }

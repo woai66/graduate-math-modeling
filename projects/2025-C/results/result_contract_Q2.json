@@ -1,14 +1,31 @@
 {
   "question": "Q2",
-  "status": "TODO",
-  "sample_coverage": {"required": 10, "processed": 0},
+  "status": "PARTIAL",
+  "sample_coverage": {
+    "required": 10,
+    "processed": 10
+  },
   "code_entry": "code/q2_sine_fit.py",
   "input_files": [],
-  "parameters": {"period_constraint": "接近钻孔周长 94.25 mm"},
-  "outputs": {"tables": [], "figures": [], "attachments": []},
-  "metrics": ["R2", "RMSE", "parameter_stability"],
-  "validation": [],
+  "parameters": {
+    "period_constraint": "接近钻孔周长 94.25 mm"
+  },
+  "outputs": {
+    "tables": [
+      "results/q2_cluster_sine_results.csv"
+    ],
+    "figures": [],
+    "attachments": []
+  },
+  "metrics": [
+    "R2",
+    "RMSE",
+    "parameter_stability"
+  ],
+  "validation": [
+    "基线结果，待独立审查"
+  ],
   "seed": null,
   "runtime_seconds": null,
-  "run_id": ""
+  "run_id": "q2-20260913-ransac-v1"
 }

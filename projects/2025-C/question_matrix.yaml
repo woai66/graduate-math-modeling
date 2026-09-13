@@ -10,7 +10,7 @@ questions:
     metrics: ["IoU", "Dice/F1", "Precision", "Recall"]
     figures: ["原图与标注", "预处理对比", "分割结果", "混淆矩阵或指标图"]
     code_entry: "projects/2025-C/code/q1_segmentation.py"
-    status: TODO
+    status: PARTIAL
   - id: Q2
     title: "正弦状裂隙的定量分析建模"
     input: "附件2，10张 244×1350 像素图像"
@@ -20,7 +20,7 @@ questions:
     metrics: ["R²", "RMSE", "参数稳定性"]
     figures: ["图2-1至图2-3处理过程", "聚类结果", "拟合曲线"]
     code_entry: "projects/2025-C/code/q2_sine_fit.py"
-    status: TODO
+    status: PARTIAL
   - id: Q3
     title: "复杂裂隙的定量分析建模"
     input: "附件3，11张 244×1350 像素图像"
@@ -30,7 +30,7 @@ questions:
     metrics: ["JRC", "采样稳定性", "面积关联"]
     figures: ["轮廓提取", "采样点对比", "JRC敏感性"]
     code_entry: "projects/2025-C/code/q3_jrc.py"
-    status: TODO
+    status: PARTIAL
   - id: Q4
     title: "多钻孔裂隙网络的连通性分析与三维重构"
     input: "附件4，6孔40个分段图像及孔口/孔底坐标"
@@ -40,4 +40,4 @@ questions:
     metrics: ["匹配误差", "概率校准", "覆盖收益/成本"]
     figures: ["钻孔空间布置", "裂隙网络", "补孔候选比较"]
     code_entry: "projects/2025-C/code/q4_connectivity.py"
-    status: TODO
+    status: PARTIAL

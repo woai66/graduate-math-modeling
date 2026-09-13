@@ -1,1 +1,5 @@
 claim_id,question,claim_text,evidence_type,evidence_path,code_path,parameters,validation,status
+Q1-CANDIDATE-001,Q1,附件1的10张图像均生成同尺寸候选掩膜,run,result/q1_candidate_summary.csv,code/q1_segmentation.py,CLAHE+黑帽+Canny+形态学,无标签阻断监督指标,PARTIAL
+Q2-CANDIDATE-001,Q2,附件2共10张图像完成DBSCAN候选簇与RANSAC正弦拟合,run,results/q2_cluster_sine_results.csv,code/q2_sine_fit.py,eps=0.025;period=94.25mm,逐裂隙合并和失败簇待审,PARTIAL
+Q3-CANDIDATE-001,Q3,附件3的11张图像完成轮廓提取和采样敏感性计算,run,results/q3_jrc_results.csv,code/q3_jrc.py,uniform+curvature_adaptive,JRC需工程标定,PARTIAL
+Q4-CANDIDATE-001,Q4,附件4七组相邻钻孔对生成同深度段相对连通评分,run,results/q4_connectivity_results.csv,code/q4_connectivity.py,uncalibrated relative score,缺少真实连通标签和几何匹配,PARTIAL

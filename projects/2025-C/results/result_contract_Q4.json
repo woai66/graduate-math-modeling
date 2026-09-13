@@ -1,14 +1,33 @@
 {
   "question": "Q4",
-  "status": "TODO",
-  "sample_coverage": {"required": 40, "processed": 0},
+  "status": "PARTIAL",
+  "sample_coverage": {
+    "required": 40,
+    "processed": 7
+  },
   "code_entry": "code/q4_connectivity.py",
   "input_files": [],
-  "parameters": {"neighbor_pairs": 7, "supplementary_sites": 3},
-  "outputs": {"tables": [], "figures": [], "attachments": []},
-  "metrics": ["matching_error", "probability_calibration", "coverage_cost"],
-  "validation": [],
+  "parameters": {
+    "neighbor_pairs": 7,
+    "supplementary_sites": 3
+  },
+  "outputs": {
+    "tables": [
+      "results/q4_connectivity_results.csv",
+      "results/q4_uncertainty_candidates.csv"
+    ],
+    "figures": [],
+    "attachments": []
+  },
+  "metrics": [
+    "relative_score",
+    "matching_error",
+    "coverage_cost"
+  ],
+  "validation": [
+    "基线结果，待独立审查"
+  ],
   "seed": null,
   "runtime_seconds": null,
-  "run_id": ""
+  "run_id": "q4-20260913-connectivity-v1"
 }
