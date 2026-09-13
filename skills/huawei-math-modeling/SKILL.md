@@ -30,6 +30,7 @@ metadata:
 | 检查 Word 论文 | `references/docx-checks.md` | 检查报告和待修复清单 |
 | 评估优秀论文质量 | `references/excellent-paper-rubric.md` | 评分表、红线项和定向修改清单 |
 | 阶段交接与独立验收 | `references/stage-contracts.md`、`references/evidence-chain.md` | 状态、结果契约、证据矩阵和审查报告 |
+| 国奖篇幅与结构检查 | `references/award-paper-profile.md`、`references/content-quota.yaml` | 样本画像、内容配额和 Word 结构检查 |
 
 需要处理 PDF、DOCX、XLSX、绘图或 LaTeX 时，先读取目标格式对应的工具 Skill，再执行其脚本和渲染检查。
 
@@ -77,6 +78,8 @@ Skill 内置脚本从 `SKILL_ROOT/scripts/` 调用；项目代码、结果、报
 缺少任一条件时，必须停止在较低交付级别；不能用“基线”“示意图”或“后续改进方向”替代缺失的竞赛结果。
 
 正式论文候选稿还必须通过 `references/excellent-paper-rubric.md` 的 100 分评分表：硬门禁全部通过且评分至少 85 分；90 分以上才可标记为优秀候选。任何核心模型或验证项不足、摘要数字无证据、题目要求附件缺失、官方格式未核验，立即降级为草稿。
+
+生成论文前运行 `scripts/verify_docx_structure.py` 和 `scripts/validate_evidence_matrix.py`。国奖样本的页数只作为软参考，不能用堆字数替代内容；每问的模型链、结果、验证和讨论必须达到配额并有证据。
 
 所有结论必须来自实际运行结果。缺少数据、官方规则、环境或验证证据时，明确标记阻塞，不编造结果、引用、图表或参数。
 

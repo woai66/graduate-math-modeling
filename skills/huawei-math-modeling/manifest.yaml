@@ -63,12 +63,15 @@ tools:
   docx_figures: scripts/verify_docx_figures.py
   stage_gate: scripts/check_stage_gate.py
   submission_readiness: scripts/verify_submission_readiness.py
+  docx_structure: scripts/verify_docx_structure.py
+  evidence_matrix: scripts/validate_evidence_matrix.py
 templates:
   plan: templates/plan.yaml
   stage_status: templates/stage_status.json
   result_contract: templates/result_contract.json
   evidence_matrix: templates/evidence_matrix.csv
   todo: templates/todo.md
+  content_quota: references/content-quota.yaml
 gates:
   required:
     - 每个子问题有模型、参数、结果和验证
