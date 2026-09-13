@@ -15,6 +15,7 @@ Desktop.ini
 __pycache__/
 *.py[cod]
 .venv/
+.uv-cache/
 venv/
 *.egg-info/
 
