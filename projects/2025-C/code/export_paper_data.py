@@ -116,29 +116,25 @@ data["q2"] = {
 
 # ---- Q3 ----
 q3 = read_csv("q3_jrc_results.csv")
-per_img3: dict[str, dict[str, list[float]]] = defaultdict(lambda: defaultdict(list))
+per_img3: dict[str, dict[str, list[tuple[int, float]]]] = defaultdict(lambda: defaultdict(list))
 meta3: dict[str, dict[str, float]] = {}
 for r in q3:
     img = r["image"].replace(".jpg", "")
-    per_img3[img][r["method"]].append(float(r["JRC"]))
+    per_img3[img][r["method"]].append((int(r["sample_count"]), float(r["JRC"])))
     meta3[img] = {"contour": int(float(r["contour_points"])), "area": float(r["area_pixel"])}
-
-
-def pick(vals: list[float]) -> float:
-    return round(vals[0], 2)
-
 
 q3_rows = []
 for img in sorted(per_img3, key=img_key):
-    uni = sorted(per_img3[img]["uniform"])
-    u64 = round(uni[1], 2) if len(uni) > 1 else None
-    u128 = round(uni[2], 2) if len(uni) > 2 else None
-    ad = round(per_img3[img]["curvature_adaptive"][0], 2)
+    uni = sorted(per_img3[img]["uniform"])  # 按采样点数升序: N=32, 64, 128 (不足时取轮廓全长)
+    ad_pairs = sorted(per_img3[img]["curvature_adaptive"])
     q3_rows.append({
         "image": img,
         "contour": int(meta3[img]["contour"]),
         "area": round(meta3[img]["area"], 1),
-        "u32": round(uni[0], 2), "u64": u64, "u128": u128, "ad": ad,
+        "n32": uni[0][0], "u32": round(uni[0][1], 2),
+        "n64": uni[1][0], "u64": round(uni[1][1], 2),
+        "n128": uni[2][0], "u128": round(uni[2][1], 2),
+        "nad": ad_pairs[0][0], "ad": round(ad_pairs[0][1], 2),
     })
 all_jrc = [float(r["JRC"]) for r in q3]
 uni_jrc = [float(r["JRC"]) for r in q3 if r["method"] == "uniform"]

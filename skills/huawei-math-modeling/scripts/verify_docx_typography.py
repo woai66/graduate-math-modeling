@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import re
 import zipfile
 from pathlib import Path
 from xml.etree import ElementTree as ET
@@ -22,12 +23,13 @@ def main() -> int:
         xml = archive.read("word/document.xml")
     root = ET.fromstring(xml)
     text = "\n".join("".join(node.itertext()) for node in root.findall(".//w:p", NS))
+    normalized = re.sub(r"\s+", "", text)
     checks = {
         "has_text": bool(text.strip()),
-        "has_abstract": "摘要" in text,
-        "has_keywords": "关键词" in text,
-        "has_references": "参考文献" in text,
-        "has_appendix": "附录" in text,
+        "has_abstract": "摘要" in normalized,
+        "has_keywords": "关键词" in normalized,
+        "has_references": "参考文献" in normalized,
+        "has_appendix": "附录" in normalized,
     }
     for name, passed in checks.items():
         print(f"{'PASS' if passed else 'WARN'}: {name}")

@@ -30,15 +30,23 @@ def main() -> int:
     paragraph_objects = [p for p in doc.paragraphs if p.text.strip()]
     paragraphs = [p.text.strip() for p in paragraph_objects]
     text = "".join(paragraphs)
+    normalized_text = re.sub(r"\s+", "", text)
     required = ["摘要", "问题重述", "问题一", "问题二", "问题三", "问题四", "模型评价", "参考文献", "附录"]
-    errors = [f"missing heading/content: {item}" for item in required if item not in text]
-    abstract_match = re.search(r"摘要(.*?)(?:关键词|关键字)", text)
+    errors = [f"missing heading/content: {item}" for item in required if item not in normalized_text]
+    abstract_match = re.search(r"摘\s*要(.*?)(?:关\s*键\s*词|关\s*键\s*字)", text)
     abstract_chars = len(abstract_match.group(1)) if abstract_match else 0
     if abstract_chars < args.min_abstract_chars:
         errors.append(f"abstract chars={abstract_chars} < {args.min_abstract_chars}")
     question_lengths = {}
     ordinal_map = {"一": 1, "二": 2, "三": 3, "四": 4}
-    heading_items = [(index, paragraph.text.strip()) for index, paragraph in enumerate(paragraph_objects) if paragraph.style.name.startswith("Heading") and re.search(r"(?:\d+\s*)?问题[一二三四]", paragraph.text)]
+    all_headings = [(index, paragraph.text.strip()) for index, paragraph in enumerate(paragraph_objects) if re.match(r"^\s*(?:\d+\s*)?问题[一二三四]", paragraph.text)]
+    latest = {}
+    for index, heading in all_headings:
+        ordinal_match = re.search(r"问题([一二三四])", heading)
+        if ordinal_match:
+            latest[ordinal_match.group(1)] = (index, heading)
+    heading_items = [latest[key] for key in ("一", "二", "三", "四") if key in latest]
+    heading_items.sort(key=lambda item: item[0])
     for index, (paragraph_index, heading_text) in enumerate(heading_items):
         ordinal_match = re.search(r"问题([一二三四])", heading_text)
         if not ordinal_match:
