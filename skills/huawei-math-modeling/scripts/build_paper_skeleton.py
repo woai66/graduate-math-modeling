@@ -134,6 +134,24 @@ def set_left_indent_chars(style, chars: int) -> None:
     ind.set(qn("w:left"), str(int(chars * 240)))
 
 
+def clear_all_indents(style) -> None:
+    """清空样式上的全部缩进。
+
+    官方模板里 Caption 等样式带着历史遗留的左缩进（Caption 为 3 cm），
+    不清掉会出现“居中但整体偏右”的现象。
+    """
+    ppr = style.element.get_or_add_pPr()
+    ind = ppr.find(qn("w:ind"))
+    if ind is None:
+        return
+    for attr in (
+        "w:firstLineChars", "w:firstLine", "w:hangingChars", "w:hanging",
+        "w:leftChars", "w:left", "w:rightChars", "w:right", "w:start", "w:end",
+    ):
+        if ind.get(qn(attr)) is not None:
+            del ind.attrib[qn(attr)]
+
+
 def clear_para_indent(paragraph) -> None:
     ppr = paragraph._p.get_or_add_pPr()
     ind = ppr.find(qn("w:ind"))
@@ -227,45 +245,54 @@ def override_styles(doc) -> None:
             continue
         style_fonts(st, HEI, WEST, size)
         clear_spacing(st)
+        clear_all_indents(st)
         st.paragraph_format.alignment = (
             WD_ALIGN_PARAGRAPH.CENTER if name == "Heading 1" else WD_ALIGN_PARAGRAPH.LEFT
         )
         st.paragraph_format.keep_with_next = True
 
-    try:
-        cap = doc.styles["Caption"]
-    except KeyError:
-        cap = doc.styles.add_style("Caption", 1)
-    style_fonts(cap, SONG, WEST, PT_CAPTION)
-    clear_spacing(cap)
-    cap.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
-
-    def ensure(name, ea, west, size, align, indent=0, color=BLACK, bold=None):
+    def ensure(name, ea, west, size, align, indent=0, color=BLACK, bold=None, left_chars=0):
         try:
             st = doc.styles[name]
         except KeyError:
             st = doc.styles.add_style(name, 1)
         st.base_style = doc.styles["Normal"]
-        style_fonts(st, ea, west, size, color, bold)
+        clear_all_indents(st)
         clear_spacing(st)
+        style_fonts(st, ea, west, size, color, bold)
         st.paragraph_format.alignment = align
-        set_indent_chars(st, indent)
+        if indent:
+            set_indent_chars(st, indent)
+        if left_chars:
+            set_left_indent_chars(st, left_chars)
         return st
 
+    ensure("Caption", SONG, WEST, PT_CAPTION, WD_ALIGN_PARAGRAPH.CENTER)
     ensure("目录标题", HEI, WEST, PT_HEAD_BIG, WD_ALIGN_PARAGRAPH.CENTER)
-    ensure("表格文字", SONG, WEST, PT_BODY, WD_ALIGN_PARAGRAPH.LEFT)
-    ref = ensure("参考文献条目", SONG, WEST, PT_CAPTION, WD_ALIGN_PARAGRAPH.LEFT)
-    ref.paragraph_format.left_indent = Pt(21)
+    ensure("表格文字", SONG, WEST, PT_BODY, WD_ALIGN_PARAGRAPH.CENTER)
+    ref = ensure("参考文献条目", SONG, WEST, PT_CAPTION, WD_ALIGN_PARAGRAPH.LEFT, left_chars=2)
     ref.paragraph_format.first_line_indent = Pt(-21)
     ensure("代码", SONG, MONO, PT_CAPTION, WD_ALIGN_PARAGRAPH.LEFT)
     ensure("提示", SONG, WEST, PT_CAPTION, WD_ALIGN_PARAGRAPH.LEFT, color=GRAY)
 
-    # 目录条目样式：一级加粗，二级/三级逐级缩进，均带点线引导
-    for name, bold, left in (("TOC 1", True, 0), ("TOC 2", False, 2), ("TOC 3", False, 4)):
-        st = ensure(name, SONG, WEST, PT_BODY, WD_ALIGN_PARAGRAPH.LEFT, bold=bold)
-        if left:
-            set_left_indent_chars(st, left)
-        add_right_dot_tab(st)
+    # 目录条目样式：一级加粗，二级/三级逐级缩进，均带点线引导。
+    # Word 内置样式名为小写 "toc 1"…，此处把大小写两种都覆盖，避免设置落空。
+    for level in (1, 2, 3):
+        for name in (f"TOC {level}", f"toc {level}"):
+            try:
+                st = doc.styles[name]
+            except KeyError:
+                if not name.startswith("TOC"):
+                    continue
+                st = doc.styles.add_style(name, 1)
+            st.base_style = doc.styles["Normal"]
+            clear_all_indents(st)
+            clear_spacing(st)
+            style_fonts(st, SONG, WEST, PT_BODY, BLACK, bold=(level == 1))
+            st.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.LEFT
+            if level > 1:
+                set_left_indent_chars(st, 2 * (level - 1))
+            add_right_dot_tab(st)
 
 
 def find_paragraph(doc, pattern: str):
@@ -441,13 +468,14 @@ def main() -> int:
     clear_table_indents(doc)
 
     title_para = find_paragraph(doc, r"^题\s*目")
-    if title_para is not None and args.title:
+    if title_para is not None:
         for run in list(title_para.runs):
             run._r.getparent().remove(run._r)
         run = title_para.add_run("题    目：")
         run_fonts(run, "隶书", "隶书", 18.0)
-        run = title_para.add_run(args.title)
-        run_fonts(run, HEI, WEST, PT_HEAD_BIG)
+        if args.title:
+            run = title_para.add_run(args.title)
+            run_fonts(run, HEI, WEST, PT_HEAD_BIG)
 
     kw_para = find_paragraph(doc, r"^关键词")
     abstract_hint = (
@@ -463,14 +491,6 @@ def main() -> int:
             print(f"已清理模板尾部空段落 {trimmed} 个")
     else:
         print("警告: 未找到“关键词”段落，摘要提示未插入")
-
-    if doc.tables:
-        tbl = doc.tables[0]._tbl
-        new_p = OxmlElement("w:p")
-        tbl.addnext(new_p)
-        para = Paragraph(new_p, doc._body)
-        para.text = "【封面按官方模板填写学校、参赛队号、队员姓名；正文及之后各页不得出现任何身份信息】"
-        para.style = doc.styles["提示"]
 
     if not args.no_toc:
         build_toc_page(doc)
