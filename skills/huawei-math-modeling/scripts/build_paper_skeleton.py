@@ -2,20 +2,21 @@
 """以官方论文模板为底稿，生成可直接填写的研赛论文 DOCX 骨架。
 
 封面、摘要页的版式（官方 logo、报名表格、华文新魏/隶书标题、页边距、页码起始 0）
-全部沿用官方附件3 模板本身，因此与官方发布的开头格式逐项一致；本脚本只做三件事：
-  1. 把正文样式覆盖为附件2 要求：题目三号黑体、一级标题四号黑体、其余小四宋体、单倍行距；
+全部沿用官方附件3 模板本身；本脚本负责：
+  1. 覆盖正文样式为附件2 要求：题目三号黑体、一级标题四号黑体、其余小四宋体、单倍行距；
   2. 在摘要页插入摘要/创新点/关键词的填写占位；
-  3. 在摘要页之后追加优秀论文范式的正文骨架（逐问闭环 + 模型评价 + 参考文献 + 附录）。
+  3. 插入「目录」页与真正的 TOC 域（可在 Word 中按 F9 更新）；
+  4. 追加优秀论文范式的正文骨架：一级标题用中文序号，二级标题用 N.M。
 
 为什么以模板为底稿而不是重新绘制封面：官方 logo 尺寸、表格线、标题字体与行距都在模板里，
-重建必然产生偏差。底稿方式可以保证开头与官方一致。
+重建必然产生偏差。
 
 用法：
-    python build_paper_skeleton.py <输出.docx> --template <官方论文模板.docx>
-                                   [--questions 4] [--title 论文题目]
+    python build_paper_skeleton.py <输出.docx> [--template <官方模板.docx>]
+                                   [--questions 4] [--title 论文题目] [--no-toc]
 
-若未给出 --template，脚本按顺序查找环境变量 MATHMODEL_TEMPLATE 与资料目录中的
-“附件3*.docx”。找不到时直接报错，不会退回自绘封面。
+生成的 TOC 域初始为空，需要在 Word 中更新一次；可用 --template 之外的
+scripts/update_word_fields 步骤完成（本仓库在生成后由 Word 更新并另存）。
 """
 from __future__ import annotations
 
@@ -28,10 +29,15 @@ from pathlib import Path
 
 try:
     from docx import Document
-    from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_LINE_SPACING
+    from docx.enum.text import (
+        WD_ALIGN_PARAGRAPH,
+        WD_LINE_SPACING,
+        WD_TAB_ALIGNMENT,
+        WD_TAB_LEADER,
+    )
     from docx.oxml import OxmlElement
     from docx.oxml.ns import qn
-    from docx.shared import Pt, RGBColor
+    from docx.shared import Cm, Pt, RGBColor
     from docx.text.paragraph import Paragraph
 except ImportError:  # pragma: no cover
     print("BLOCKED: 缺少 python-docx，请先执行 uv add python-docx")
@@ -43,15 +49,19 @@ HEI = "黑体"
 WEST = "Times New Roman"
 MONO = "Consolas"
 
-PT_TITLE = 16.0      # 三号
-PT_HEAD = 14.0       # 四号
-PT_BODY = 12.0       # 小四
-PT_CAPTION = 10.5    # 五号
+PT_HEAD_BIG = 16.0   # 三号：题目、目录标题
+PT_HEAD = 14.0       # 四号：一级标题
+PT_BODY = 12.0       # 小四：正文、目录条目
+PT_CAPTION = 10.5    # 五号：图表题注、参考文献
 
 BLACK = RGBColor(0x1A, 0x1A, 0x1A)
 GRAY = RGBColor(0x59, 0x59, 0x59)
 
 THEME_ATTRS = ("w:asciiTheme", "w:eastAsiaTheme", "w:hAnsiTheme", "w:cstheme", "w:cs")
+
+CN_NUM = "一二三四五六七八九十"
+
+TEXT_WIDTH_CM = 21.0 - 2.25 - 2.25   # 版心宽度 16.5 cm
 
 DEFAULT_TEMPLATE_GLOBS = [
     r"F:\goodstudy\研0\竞赛\数模\附件3*.docx",
@@ -64,15 +74,14 @@ def find_template() -> Path | None:
     if env and Path(env).is_file():
         return Path(env)
     for pattern in DEFAULT_TEMPLATE_GLOBS:
-        hits = sorted(glob.glob(pattern, recursive=True))
-        for hit in hits:
+        for hit in sorted(glob.glob(pattern, recursive=True)):
             if Path(hit).is_file():
                 return Path(hit)
     return None
 
 
 def set_rpr_fonts(rpr, east_asian: str, ascii_font: str) -> None:
-    """设置字体，并清除会覆盖显式字体的主题属性（否则 Word 会忽略黑体/宋体）。"""
+    """设置字体并清除主题属性，否则 Word 会用主题字体覆盖黑体/宋体。"""
     rfonts = rpr.find(qn("w:rFonts"))
     if rfonts is None:
         rfonts = OxmlElement("w:rFonts")
@@ -85,17 +94,18 @@ def set_rpr_fonts(rpr, east_asian: str, ascii_font: str) -> None:
     rfonts.set(qn("w:hAnsi"), ascii_font)
 
 
-def style_fonts(style, east_asian: str, ascii_font: str, size_pt: float, color=BLACK) -> None:
+def style_fonts(style, east_asian, ascii_font, size_pt, color=BLACK, bold=None) -> None:
     style.font.name = ascii_font
     style.font.size = Pt(size_pt)
     style.font.color.rgb = color
-    style.font.bold = None
+    style.font.bold = bold
     set_rpr_fonts(style.element.get_or_add_rPr(), east_asian, ascii_font)
 
 
-def run_fonts(run, east_asian: str, ascii_font: str, size_pt: float, color=BLACK) -> None:
+def run_fonts(run, east_asian, ascii_font, size_pt, color=BLACK, bold=None) -> None:
     run.font.size = Pt(size_pt)
     run.font.color.rgb = color
+    run.font.bold = bold
     set_rpr_fonts(run._r.get_or_add_rPr(), east_asian, ascii_font)
 
 
@@ -114,8 +124,17 @@ def set_indent_chars(style, chars: int) -> None:
                 del ind.attrib[qn(attr)]
 
 
+def set_left_indent_chars(style, chars: int) -> None:
+    ppr = style.element.get_or_add_pPr()
+    ind = ppr.find(qn("w:ind"))
+    if ind is None:
+        ind = OxmlElement("w:ind")
+        ppr.append(ind)
+    ind.set(qn("w:leftChars"), str(chars * 100))
+    ind.set(qn("w:left"), str(int(chars * 240)))
+
+
 def clear_para_indent(paragraph) -> None:
-    """在段落级把首行缩进清零，避免正文样式的 2 字符缩进挤进表格。"""
     ppr = paragraph._p.get_or_add_pPr()
     ind = ppr.find(qn("w:ind"))
     if ind is None:
@@ -134,7 +153,7 @@ def clear_table_indents(doc) -> None:
 
 
 def trim_trailing_empty_paragraphs(anchor_para) -> int:
-    """删除锚点段落之后、正文之前的空段落（模板尾部遗留），避免产生空白页。"""
+    """删除锚点之后、正文之前的空段落（模板尾部遗留），避免产生空白页。"""
     removed = 0
     nxt = anchor_para._element.getnext()
     while nxt is not None and nxt.tag == qn("w:p"):
@@ -157,6 +176,12 @@ def clear_spacing(style) -> None:
     pf.line_spacing_rule = WD_LINE_SPACING.SINGLE
 
 
+def add_right_dot_tab(style) -> None:
+    """右对齐 + 点线引导，目录页码才能像样例那样排到行尾。"""
+    tabs = style.paragraph_format.tab_stops
+    tabs.add_tab_stop(Cm(TEXT_WIDTH_CM), WD_TAB_ALIGNMENT.RIGHT, WD_TAB_LEADER.DOTS)
+
+
 def set_cell_bottom_border(cell) -> None:
     tc_pr = cell._tc.get_or_add_tcPr()
     borders = OxmlElement("w:tcBorders")
@@ -168,8 +193,27 @@ def set_cell_bottom_border(cell) -> None:
     tc_pr.append(borders)
 
 
+def add_toc_field(paragraph) -> None:
+    """插入真正的 TOC 域，Word 中可按 F9 更新。"""
+    run = paragraph.add_run()
+    begin = OxmlElement("w:fldChar")
+    begin.set(qn("w:fldCharType"), "begin")
+    begin.set(qn("w:dirty"), "true")
+    instr = OxmlElement("w:instrText")
+    instr.set(qn("xml:space"), "preserve")
+    instr.text = r' TOC \o "1-3" \h \z \u '
+    separate = OxmlElement("w:fldChar")
+    separate.set(qn("w:fldCharType"), "separate")
+    placeholder = OxmlElement("w:t")
+    placeholder.text = "在 Word 中按 Ctrl+A 后按 F9，或右键选择“更新域”生成目录"
+    end = OxmlElement("w:fldChar")
+    end.set(qn("w:fldCharType"), "end")
+    for el in (begin, instr, separate, placeholder, end):
+        run._r.append(el)
+    run_fonts(run, SONG, WEST, PT_BODY)
+
+
 def override_styles(doc) -> None:
-    """把正文相关样式覆盖为附件2 要求，并补齐骨架需要的自定义样式。"""
     normal = doc.styles["Normal"]
     style_fonts(normal, SONG, WEST, PT_BODY)
     clear_spacing(normal)
@@ -196,24 +240,32 @@ def override_styles(doc) -> None:
     clear_spacing(cap)
     cap.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
 
-    def ensure(name, ea, west, size, align, indent=0, color=BLACK):
+    def ensure(name, ea, west, size, align, indent=0, color=BLACK, bold=None):
         try:
             st = doc.styles[name]
         except KeyError:
             st = doc.styles.add_style(name, 1)
         st.base_style = doc.styles["Normal"]
-        style_fonts(st, ea, west, size, color)
+        style_fonts(st, ea, west, size, color, bold)
         clear_spacing(st)
         st.paragraph_format.alignment = align
         set_indent_chars(st, indent)
         return st
 
+    ensure("目录标题", HEI, WEST, PT_HEAD_BIG, WD_ALIGN_PARAGRAPH.CENTER)
     ensure("表格文字", SONG, WEST, PT_BODY, WD_ALIGN_PARAGRAPH.LEFT)
     ref = ensure("参考文献条目", SONG, WEST, PT_CAPTION, WD_ALIGN_PARAGRAPH.LEFT)
     ref.paragraph_format.left_indent = Pt(21)
     ref.paragraph_format.first_line_indent = Pt(-21)
     ensure("代码", SONG, MONO, PT_CAPTION, WD_ALIGN_PARAGRAPH.LEFT)
     ensure("提示", SONG, WEST, PT_CAPTION, WD_ALIGN_PARAGRAPH.LEFT, color=GRAY)
+
+    # 目录条目样式：一级加粗，二级/三级逐级缩进，均带点线引导
+    for name, bold, left in (("TOC 1", True, 0), ("TOC 2", False, 2), ("TOC 3", False, 4)):
+        st = ensure(name, SONG, WEST, PT_BODY, WD_ALIGN_PARAGRAPH.LEFT, bold=bold)
+        if left:
+            set_left_indent_chars(st, left)
+        add_right_dot_tab(st)
 
 
 def find_paragraph(doc, pattern: str):
@@ -225,17 +277,8 @@ def find_paragraph(doc, pattern: str):
     return None
 
 
-def note(doc, parent_para, text: str, position: str = "before"):
-    """在指定段落前/后插入一条灰色提示。"""
-    new_p = parent_para.insert_paragraph_before(text, style="提示")
-    if position == "after":
-        parent_para._element.addnext(new_p._element)
-    return new_p
-
-
 def append_paragraph(doc, text: str, style: str | None = None):
-    para = doc.add_paragraph(text, style=style)
-    return para
+    return doc.add_paragraph(text, style=style)
 
 
 def heading(doc, text: str, level: int):
@@ -250,9 +293,23 @@ def caption(doc, text: str):
     return append_paragraph(doc, text, style="Caption")
 
 
-def build_question(doc, index: int, base: int) -> None:
+def cn_num(index: int) -> str:
+    if 1 <= index <= len(CN_NUM):
+        return CN_NUM[index - 1]
+    return str(index)
+
+
+def build_toc_page(doc) -> None:
+    para = append_paragraph(doc, "目  录", style="目录标题")
+    para.paragraph_format.page_break_before = True
+    toc_para = append_paragraph(doc, "")
+    toc_para.paragraph_format.first_line_indent = Pt(0)
+    add_toc_field(toc_para)
+
+
+def build_question(doc, index: int, chapter: int) -> None:
     ordinal = ["一", "二", "三", "四", "五"][index - 1]
-    heading(doc, f"{base} 问题{ordinal}：模型建立与求解", 1)
+    heading(doc, f"{cn_num(chapter)}.问题{ordinal}模型建立与求解", 1)
     guidance(doc, "【本问要回答的任务、题面编号与输出要求】")
     sections = [
         ("问题分析", "【本问与前后问的联系、难点、可计算定义与反例、选模理由】"),
@@ -264,21 +321,21 @@ def build_question(doc, index: int, base: int) -> None:
         ("小结", "【本问结论、单位、不确定性与对下一问的接口】"),
     ]
     for order, (sub_title, hint) in enumerate(sections, start=1):
-        heading(doc, f"{base}.{order} {sub_title}", 2)
+        heading(doc, f"{chapter}.{order} {sub_title}", 2)
         guidance(doc, hint)
         if sub_title == "结果与分析":
-            caption(doc, f"图 {base}-1 【图题：说明对象、条件与单位】")
-            caption(doc, f"表 {base}-1 【表题：说明对象、条件与单位】")
+            caption(doc, f"图 {chapter}-1 【图题：说明对象、条件与单位】")
+            caption(doc, f"表 {chapter}-1 【表题：说明对象、条件与单位】")
 
 
 def append_body(doc, questions: int) -> None:
-    heading(doc, "1 问题重述", 1)
+    heading(doc, "一.问题重述", 1)
     heading(doc, "1.1 问题背景", 2)
     guidance(doc, "【只写与本题相关的背景，避免大段科普。】")
     heading(doc, "1.2 问题提出", 2)
     guidance(doc, "【逐问复述任务动词、对象、输入、输出、约束和评价口径。】")
 
-    heading(doc, "2 问题分析与技术路线", 1)
+    heading(doc, "二.问题分析与技术路线", 1)
     heading(doc, "2.1 总体思路", 2)
     guidance(doc, "【说明各问之间的依赖关系、跨问接口和不确定性传递。】")
     heading(doc, "2.2 各问难点与建模思路", 2)
@@ -286,7 +343,7 @@ def append_body(doc, questions: int) -> None:
     heading(doc, "2.3 技术路线图", 2)
     caption(doc, "图 2-1 【技术路线图：与正文各问一一对应】")
 
-    heading(doc, "3 模型假设与符号说明", 1)
+    heading(doc, "三.模型假设与符号说明", 1)
     heading(doc, "3.1 模型假设", 2)
     guidance(doc, "【假设 1：……（写清工程或数据依据，并说明可检验方式）。】")
     heading(doc, "3.2 符号说明", 2)
@@ -298,7 +355,7 @@ def append_body(doc, questions: int) -> None:
             cell.text = text
             for para in cell.paragraphs:
                 para.style = doc.styles["表格文字"]
-                para.paragraph_format.first_line_indent = Pt(0)
+                clear_para_indent(para)
     tbl_pr = table._tbl.tblPr
     borders = OxmlElement("w:tblBorders")
     for edge in ("top", "bottom"):
@@ -317,7 +374,7 @@ def append_body(doc, questions: int) -> None:
         set_cell_bottom_border(cell)
     caption(doc, "表 3-1 符号说明")
 
-    heading(doc, "4 数据来源与预处理", 1)
+    heading(doc, "四.数据来源与预处理", 1)
     heading(doc, "4.1 数据来源与字段说明", 2)
     guidance(doc, "【来源、文件清单与哈希、字段、单位、坐标系、时间范围与业务键。】")
     heading(doc, "4.2 数据初检", 2)
@@ -328,17 +385,16 @@ def append_body(doc, questions: int) -> None:
     for i in range(1, questions + 1):
         build_question(doc, i, 4 + i)
 
-    review_base = 4 + questions + 1
-    heading(doc, f"{review_base} 模型评价与推广", 1)
-    heading(doc, f"{review_base}.1 模型优点", 2)
+    review_chapter = 4 + questions + 1
+    heading(doc, f"{cn_num(review_chapter)}.模型评价与推广", 1)
+    heading(doc, f"{review_chapter}.1 模型优点", 2)
     guidance(doc, "【逐问说明优点，不要只写统一的一段。】")
-    heading(doc, f"{review_base}.2 模型不足", 2)
+    heading(doc, f"{review_chapter}.2 模型不足", 2)
     guidance(doc, "【写清失效条件、未覆盖样本与证据边界。】")
-    heading(doc, f"{review_base}.3 改进方向与推广", 2)
+    heading(doc, f"{review_chapter}.3 改进方向与推广", 2)
     guidance(doc, "【说明进一步可做的实验与适用范围。】")
 
-    ref_base = review_base + 1
-    heading(doc, f"{ref_base} 参考文献", 1)
+    heading(doc, "参考文献", 1)
     for sample in [
         "[1] 作者，书名，出版地：出版社，起止页码，出版年。",
         "[2] 作者，论文名，杂志名，卷期号：起止页码，出版年。",
@@ -347,13 +403,12 @@ def append_body(doc, questions: int) -> None:
         append_paragraph(doc, sample, style="参考文献条目")
     guidance(doc, "【正文引用处用方括号标注编号，如 [1][3]；引用书籍必须指出页码；每条文献都要被正文引用。】")
 
-    app_base = ref_base + 1
-    heading(doc, f"{app_base} 附录", 1)
-    heading(doc, f"{app_base}.1 程序代码索引", 2)
+    heading(doc, "附录", 1)
+    heading(doc, "A.1 程序代码索引", 2)
     guidance(doc, "【列出代码文件名、用途与运行入口；源代码按题目要求另行提交竞赛系统。】")
-    heading(doc, f"{app_base}.2 复现环境与运行说明", 2)
+    heading(doc, "A.2 复现环境与运行说明", 2)
     guidance(doc, "【Python 版本、依赖锁、随机种子、运行命令、输入哈希。】")
-    heading(doc, f"{app_base}.3 人工智能工具使用说明", 2)
+    heading(doc, "A.3 人工智能工具使用说明", 2)
     guidance(
         doc,
         "【按附件4 要求列明：工具名称、版本/型号、开发机构/公司、版本发布日期，"
@@ -367,6 +422,7 @@ def main() -> int:
     parser.add_argument("--template", type=Path, default=None, help="官方论文模板 .docx")
     parser.add_argument("--questions", type=int, default=4, help="题面的问题数量，默认 4")
     parser.add_argument("--title", default=None, help="论文题目；不填则保留模板下划线待填写")
+    parser.add_argument("--no-toc", action="store_true", help="不插入目录页")
     args = parser.parse_args()
 
     if not 1 <= args.questions <= 5:
@@ -382,10 +438,8 @@ def main() -> int:
 
     doc = Document(str(template))
     override_styles(doc)
-    # 正文样式的首行缩进不能影响封面报名表格，否则标签列会被挤成两行
     clear_table_indents(doc)
 
-    # 题目：填写到模板的“题 目：”行
     title_para = find_paragraph(doc, r"^题\s*目")
     if title_para is not None and args.title:
         for run in list(title_para.runs):
@@ -393,11 +447,8 @@ def main() -> int:
         run = title_para.add_run("题    目：")
         run_fonts(run, "隶书", "隶书", 18.0)
         run = title_para.add_run(args.title)
-        run_fonts(run, HEI, WEST, PT_TITLE)
-    elif title_para is not None:
-        note(doc, title_para, "【在此填写论文题目；如需居中三号黑体，请另起一行】", position="after")
+        run_fonts(run, HEI, WEST, PT_HEAD_BIG)
 
-    # 摘要页：在“摘 要：”之后插入填写占位，在“关键词：”之前插入创新点占位
     kw_para = find_paragraph(doc, r"^关键词")
     abstract_hint = (
         "【摘要需写清：针对问题一……；针对问题二……；最后是总体结论与创新点。"
@@ -405,7 +456,6 @@ def main() -> int:
     )
     innovation_hint = "【创新点：说明新在哪里、为什么旧方法不够、如何验证、适用边界。】"
     if kw_para is not None:
-        # 先插摘要说明、再插创新点说明，保证顺序为 摘要 → 摘要说明 → 创新点 → 关键词
         kw_para.insert_paragraph_before(abstract_hint, style="提示")
         kw_para.insert_paragraph_before(innovation_hint, style="提示")
         trimmed = trim_trailing_empty_paragraphs(kw_para)
@@ -414,7 +464,6 @@ def main() -> int:
     else:
         print("警告: 未找到“关键词”段落，摘要提示未插入")
 
-    # 封面表格之后提示身份信息边界
     if doc.tables:
         tbl = doc.tables[0]._tbl
         new_p = OxmlElement("w:p")
@@ -423,18 +472,23 @@ def main() -> int:
         para.text = "【封面按官方模板填写学校、参赛队号、队员姓名；正文及之后各页不得出现任何身份信息】"
         para.style = doc.styles["提示"]
 
+    if not args.no_toc:
+        build_toc_page(doc)
+
     append_body(doc, args.questions)
     clear_table_indents(doc)
-    # 正文从新的一页开始，且不依赖模板遗留的空段落
-    first_body = find_paragraph(doc, r"^1\s*问题重述")
-    if first_body is not None:
-        first_body.paragraph_format.page_break_before = True
+
+    for probe in (r"^一\.问题重述", r"^1\s*问题重述"):
+        first_body = find_paragraph(doc, probe)
+        if first_body is not None:
+            first_body.paragraph_format.page_break_before = True
+            break
 
     args.output.parent.mkdir(parents=True, exist_ok=True)
     doc.save(args.output)
+    toc_note = "含目录页（TOC 域，需在 Word 中更新）" if not args.no_toc else "无目录页"
     print(
-        f"PASS: 已生成 {args.output}（底稿=官方模板；{args.questions} 个问题章节；"
-        "封面与摘要页沿用官方版式）"
+        f"PASS: 已生成 {args.output}（底稿=官方模板；{args.questions} 个问题章节；{toc_note}）"
     )
     return 0
 

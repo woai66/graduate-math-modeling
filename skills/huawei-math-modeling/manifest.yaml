@@ -64,6 +64,7 @@ capability_status:
   docx_format_checker: exercised_on_real_drafts
   paper_skeleton: generated_and_word_verified
   paper_skeleton_base: official_annex3_template_as_document_base
+  paper_skeleton_toc: real_TOC_field_updated_by_word
   official_template_in_repo: "false（以本机官方模板为底稿，仓库不存原件）"
   tex_live_installation: installed_2026-09-22_user_prefix
   latex_template_compile: xelatex_verified_3_pages_fonts_embedded

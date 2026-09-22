@@ -83,7 +83,9 @@ Word 与 LaTeX 都需要换算，避免“看起来差不多”：
 
 **必须用样式排版，不要手工改字号。**手工格式会在增删段落、生成目录、交叉引用时失控，也无法被脚本检查。
 
-已按本节要求做好可直接填写的骨架：`templates/paper-skeleton.docx`（使用说明见 `templates/paper-skeleton-usage.md`，生成脚本 `scripts/build_paper_skeleton.py`）。它已用 Microsoft Word 实际打开并导出 PDF 验证，开了题目、正文、题注、参考文献等样式，不需要自己调字号。
+已按本节要求做好可直接填写的骨架：`templates/paper-skeleton.docx`（使用说明见 `templates/paper-skeleton-usage.md`，生成脚本 `scripts/build_paper_skeleton.py`）。它已用 Microsoft Word 实际打开、更新域并导出 PDF 验证，开了题目、正文、题注、参考文献、目录条目等样式，不需要自己调字号。
+
+目录使用真正的 TOC 域（`TOC \o "1-3" \h \z \u`）而不是手工列表：一级条目中文序号加粗、二级条目 N.M 缩进、点线引导、页码右对齐，样式为 `TOC 1`—`TOC 3`。改稿后在 Word 中 `Ctrl+A` → `F9` 即可更新页码。手工敲目录在增删章节后必然失准，因此不采用。
 
 | 样式名 | 中文字体 | 西文字体 | 字号 | 对齐 | 行距 | 备注 |
 | --- | --- | --- | --- | --- | --- | --- |

@@ -168,8 +168,10 @@ CODE_HINT_RE = re.compile(r"[{};=<>\[\]]|^\s{2,}\S")
 
 # 封面与摘要页沿用官方模板字体（华文新魏/隶书），不按正文字体判定
 FRONT_MATTER_RE = re.compile(
-    r"^(中国研究生创新实践系列大赛|“?华为杯”?第.{1,6}届|数学建模竞赛|题\s*目|摘\s*要|关\s*键\s*词)"
+    r"^(中国研究生创新实践系列大赛|“?华为杯”?第.{1,6}届|数学建模竞赛|题\s*目|摘\s*要|关\s*键\s*词|目\s*录)"
 )
+
+TOC_STYLE_RE = re.compile(r"^TOC\s*[1-9]$", re.IGNORECASE)
 
 
 def looks_like_code(text: str) -> bool:
@@ -198,6 +200,8 @@ def classify(paragraph) -> str:
         return "note"
     if FRONT_MATTER_RE.match(re.sub(r"\s+", "", text)) or FRONT_MATTER_RE.match(text):
         return "front"
+    if TOC_STYLE_RE.match(name.strip()):
+        return "toc"
     if "caption" in lower or "题注" in name:
         return "caption"
     if "代码" in name or "code" in lower or "preformatted" in lower:
@@ -287,7 +291,7 @@ def main() -> int:
         kind = classify(paragraph)
         if kind == "empty":
             continue
-        if kind in ("cover", "reference", "caption", "code", "note", "front"):
+        if kind in ("cover", "reference", "caption", "code", "note", "front", "toc"):
             skipped_styles[kind] += 1
             continue
         ea, ascii_, size = effective_format(paragraph)
@@ -334,7 +338,10 @@ def main() -> int:
 
     # 没有“论文题目”样式时，退回到第一段非封面文字
     if not any(p.text.strip() and style_name(p) in TITLE_STYLE_NAMES for p in doc.paragraphs):
-        skip_kinds = {"empty", "front", "cover", "note", "caption", "code", "reference", "title"}
+        skip_kinds = {
+            "empty", "front", "cover", "note", "caption", "code",
+            "reference", "title", "toc",
+        }
         skip_prefixes = ("heading",)
         first_text = next(
             (
