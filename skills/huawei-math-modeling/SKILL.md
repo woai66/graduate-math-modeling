@@ -54,6 +54,8 @@ metadata:
 
 ## 当前真实能力边界
 
-第二十三届（2026）官方附件1—4 已核验并记录哈希，格式与提交要求已写入 `paper-formatting.md`、`ai-compliance.md` 和 `official-rules-checklist.md`。`scripts/verify_docx_format.py` 已能在真实草稿上给出字体、字号、行距、页码域的偏差分布。
+第二十三届（2026）官方附件1—4 已核验并记录哈希，格式与提交要求已写入 `paper-formatting.md`、`ai-compliance.md` 和 `official-rules-checklist.md`。附件3 模板的页边距、页眉页脚距离和封面字段已实测并写入规范。`scripts/verify_docx_format.py` 已能在真实草稿上给出字体、字号、行距、页码域的偏差分布。
 
-仍未完成：Microsoft Word 原生渲染验证、LaTeX 模板实际编译（本机无 TeX 发行版）、完整赛题盲测和独立审阅。查看 [manifest.yaml](manifest.yaml) 和 [重做规范](references/rebuild-spec.md) 的状态，不得把资产存在或脚本运行成功当成科学验收。
+TeX Live 2026 已安装到 `C:\Users\zyq\texlive\2026`，`templates/latex/main.tex` 已实际编译通过：题目黑体 16 pt、一级标题黑体 14 pt、正文宋体 12 pt、页脚页码居中，字体正确嵌入，摘要页为第 1 页、正文从第 2 页开始。
+
+仍未完成：Microsoft Word 原生渲染验证、完整赛题盲测和独立审阅。查看 [manifest.yaml](manifest.yaml) 和 [重做规范](references/rebuild-spec.md) 的状态，不得把资产存在或脚本运行成功当成科学验收。

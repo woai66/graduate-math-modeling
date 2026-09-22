@@ -43,6 +43,10 @@ FONT_WEST = {"Times New Roman"}
 
 FIELD_PAGE = ("PAGE",)
 
+# 官方附件3 论文模板实测页边距（mm），容差 ±2 mm
+TEMPLATE_MARGINS_MM = {"top": 30.0, "bottom": 17.5, "left": 22.5, "right": 22.5}
+MARGIN_TOLERANCE_MM = 2.0
+
 
 def iter_runs(paragraph):
     for run in paragraph.runs:
@@ -226,6 +230,21 @@ def main() -> int:
                 r=section.right_margin.mm if section.right_margin else 0,
             )
         )
+        actual = {
+            "top": section.top_margin.mm if section.top_margin else 0,
+            "bottom": section.bottom_margin.mm if section.bottom_margin else 0,
+            "left": section.left_margin.mm if section.left_margin else 0,
+            "right": section.right_margin.mm if section.right_margin else 0,
+        }
+        deviating = [
+            "%s %.1f→%.1f" % (side, actual[side], expect)
+            for side, expect in TEMPLATE_MARGINS_MM.items()
+            if abs(actual[side] - expect) > MARGIN_TOLERANCE_MM
+        ]
+        if deviating:
+            notes.append(
+                "第 %d 节页边距与官方模板偏差（实际→模板 mm）：%s" % (index, "，".join(deviating))
+            )
         if header_has_text(section):
             problems.append(f"第 {index} 节页眉有内容；官方要求不得有页眉")
         footer = section.footer

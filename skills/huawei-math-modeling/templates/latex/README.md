@@ -4,33 +4,55 @@
 
 `main.tex` 按“华为杯”第二十三届（2026）《论文格式规范》编写，条款对应关系见 `../../references/paper-formatting.md` 第 8 节。
 
-**尚未编译验证**：本机没有安装 TeX 发行版（`xelatex`、`bibtex`、`biber` 均不可用），因此本模板只经过静态审查，没有实际编译通过。第一次使用前必须先装发行版并编译一次，把报错和实际生成的 PDF 反馈回来修正。
+**已编译验证**（2026-09-22，TeX Live 2026 + XeLaTeX）：连续两次 `xelatex` 成功生成 3 页 PDF，无错误。实测结果：
 
-## 安装 TeX 发行版
+| 检查项 | 实测 |
+| --- | --- |
+| 题目 | 黑体 16.00 pt（三号）+ 西文 Times New Roman 16 pt |
+| 一级标题 | 黑体 14.00 pt（四号） |
+| 正文 | 宋体 12.00 pt（小四） |
+| 图表标题 | 宋体 10.50 pt（五号） |
+| 页脚页码 | Times New Roman 10.50 pt |
+| 纸张 | 595.3 × 841.9 pt（A4） |
+| 嵌入字体 | SimSun、SimHei、TimesNewRomanPSMT 均正确嵌入，无静默回退 |
+| 分页 | 摘要页为第 1 页，正文从第 2 页开始 |
 
-Windows 推荐 TeX Live：
+页边距取自官方附件3 模板实测值（上 30.0、下 17.5、左右 22.5 mm）。`footskip=0.9cm` 是让页脚落在下边距内的近似值，与 Word 版式可能有毫米级差异，定稿前请与官方模板并排目视比对。
 
-```powershell
-winget install --id TeXLive.TeXLive -e
+## TeX 发行版安装情况
+
+本机已安装 TeX Live 2026 到 `C:\Users\zyq\texlive\2026`，采用 `scheme-basic` + `collection-langchinese`，再按需补装 xetex 与排版宏包（不含文档，约 700 MB 量级）。可执行文件目录：
+
+```text
+C:\Users\zyq\texlive\2026\bin\windows
 ```
 
-安装后重开终端，确认：
+若在新机器安装，官方未提供 winget 包，需要下载 CTAN 的 `install-tl.zip` 后用自带 Perl 非交互安装。也可以选择 MiKTeX（`winget install MiKTeX.MiKTeX`），它会按需自动补包。
+
+## 若需补装宏包
 
 ```powershell
-xelatex --version
+C:\Users\zyq\texlive\2026\bin\windows\tlmgr.bat install <包名>
 ```
+
+## 依赖版本
+
+- XeTeX 3.141592653-2.6-0.999998（TeX Live 2026）
+- kpathsea 6.4.2
 
 ## 编译
 
 ```powershell
-cd templates/latex
-xelatex main.tex
-xelatex main.tex
+$bin = 'C:\Users\zyq\texlive\2026\bin\windows'
+& "$bin\xelatex.exe" -interaction=nonstopmode main.tex
+& "$bin\xelatex.exe" -interaction=nonstopmode main.tex
 ```
 
 本文献用 `thebibliography` 手写，不需要 BibTeX。若改用 `.bib`，编译顺序为 `xelatex → bibtex → xelatex → xelatex`。
 
 必须使用 **XeLaTeX**。`pdflatex` 无法正确加载中文字体，会出现字体缺失或静默回退。
+
+模板中的 `\includegraphics{figures/demo.pdf}` 需要先在 `figures/` 放入图片，否则编译会报找不到文件。
 
 ## 官方格式对应关系
 

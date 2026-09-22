@@ -55,11 +55,13 @@ capability_status:
   excalidraw_export: svg_png_verified
   paper_figure_embedding: wps_docx_single_page_verified
   official_2026_rules: verified_2026-09-22_with_hashes
+  official_template_layout: read_from_docx_2026-09-22
   paper_formatting_spec: documented_from_official_annex2
   ai_usage_policy: documented_from_official_annex4
   docx_format_checker: exercised_on_real_drafts
+  tex_live_installation: installed_2026-09-22_user_prefix
+  latex_template_compile: xelatex_verified_3_pages_fonts_embedded
   microsoft_word_rendering: not_verified
-  latex_template_compile: not_verified_no_tex_distribution
   open_source_version_audit: not_verified
   simulation_training: workflow_ready_not_yet_run
   full_contest_solution: not_verified
