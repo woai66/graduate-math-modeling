@@ -431,15 +431,16 @@ def append_body(doc, questions: int) -> None:
     guidance(doc, "【正文引用处用方括号标注编号，如 [1][3]；引用书籍必须指出页码；每条文献都要被正文引用。】")
 
     heading(doc, "附录", 1)
-    heading(doc, "A.1 程序代码索引", 2)
-    guidance(doc, "【列出代码文件名、用途与运行入口；源代码按题目要求另行提交竞赛系统。】")
-    heading(doc, "A.2 复现环境与运行说明", 2)
-    guidance(doc, "【Python 版本、依赖锁、随机种子、运行命令、输入哈希。】")
-    heading(doc, "A.3 人工智能工具使用说明", 2)
+    heading(doc, "A.1 人工智能工具使用说明", 2)
     guidance(
         doc,
         "【按附件4 要求列明：工具名称、版本/型号、开发机构/公司、版本发布日期，"
         "以及本队在哪些环节使用、做了哪些核对与修改。】",
+    )
+    heading(doc, "A.2 核心代码展示", 2)
+    guidance(
+        doc,
+        "【粘贴本问的核心代码，使用“代码”样式；完整源代码按题目要求另行提交竞赛系统。】",
     )
 
 
