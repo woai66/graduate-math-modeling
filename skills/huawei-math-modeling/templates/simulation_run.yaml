@@ -1,0 +1,37 @@
+# 仿真训练运行记录模板
+run_id: "2026-09-22-2025-D"
+status: exploration
+competition: "中国研究生数学建模竞赛（华为杯）"
+edition: "2025"
+problem: "D"
+topic: "低空湍流监测及最优航路规划"
+started_at: "2026-09-22"
+operator: "team"
+source:
+  problem_sha256: "B009F4598AC3EB1F126EB2D30EC26ECAAFCB873819771E14D8DE9A347C6FB7BF"
+  data_sha256: "787D51D34D6876CDF16005C0EBFC49A83E281F5CBFF3A142A64C76C53BE31347"
+  official_rules_status: not_verified
+scope:
+  question: Q1
+  time_window: "待共同确定"
+  sample_policy: "小样本优先，按业务键和时间戳选择"
+decisions:
+  confirmed: []
+  pending:
+    - "Q1 湍流强度的首轮可计算定义"
+    - "首轮独立验证方式"
+    - "进入 Q2 的证据条件"
+artifacts:
+  question_card: "题目卡.md"
+  data_dictionary: "数据字典.md"
+  discussion_log: "讨论记录.md"
+  evidence_matrix: "reports/evidence_matrix.csv"
+  environment_snapshot: "reports/ENVIRONMENT_2026-09-22.md"
+reproducibility:
+  python: "3.13.13"
+  uv: "0.12.3"
+  seed: null
+  command: null
+validation:
+  completed: []
+  blocked: []

@@ -1,0 +1,84 @@
+{
+  "review_date": "2026-09-20",
+  "reviewer": "主代理目视检查",
+  "source_html_sha256": "80f3d55551459f318b3167c9bbc14ba5883880fa6edd0449e4d01b4cadf89317",
+  "specification_sha256": "b377c0a547d92803fc094f656c46e714b42b9683a976d622cfe3b3d4c1707096",
+  "export_script_sha256": "1ed0f5a297e1c5348c595413029704aec8649e74ef9fdb389ce569e2c3eb2ec0",
+  "diagram_type": "workflow",
+  "validation": {
+    "checksPassed": 9,
+    "checkCount": 9,
+    "compositionProfile": "showcase",
+    "compositionStatus": "pass",
+    "errors": 0,
+    "warnings": 0
+  },
+  "desktop_visual_review": {
+    "status": "passed",
+    "correction_rounds": 1,
+    "automatic_containment": "pass",
+    "viewports": [
+      [
+        1440,
+        900
+      ],
+      [
+        1600,
+        1000
+      ],
+      [
+        1920,
+        1080
+      ],
+      [
+        2048,
+        1320
+      ]
+    ],
+    "inspected_images": [
+      "modeling-process.visual-check.1440x900.light.png",
+      "modeling-process.visual-check.1440x900.dark.png",
+      "modeling-process.visual-check.2048x1320.light.png",
+      "modeling-process.visual-check.2048x1320.dark.png"
+    ],
+    "observations": [
+      "文字与箭头可读，无节点遮挡及窗口溢出",
+      "核心方案调整反馈保留，其他缺陷修复遵循规范说明"
+    ]
+  },
+  "static_png_visual_review": {
+    "status": "passed_for_discussion",
+    "file": "modeling-process.png",
+    "sha256": "f5d0d3ed1e18acf5005b5a2e54752fdba2366009a1358182fac7d132aa70619b",
+    "observations": [
+      "无工具栏及交互焦点遮罩",
+      "保留六个阶段、反馈关系和图例"
+    ]
+  },
+  "positive_export_test": "passed",
+  "negative_export_tests": [
+    {
+      "case": "html_changed",
+      "passed": true,
+      "expected_failure": "HTML 与有效 delivery 凭据不一致",
+      "exit_code": 1
+    },
+    {
+      "case": "spec_changed",
+      "passed": true,
+      "expected_failure": "图规格已变化",
+      "exit_code": 1
+    },
+    {
+      "case": "invalid_checks",
+      "passed": true,
+      "expected_failure": "缺少 9/9",
+      "exit_code": 1
+    }
+  ],
+  "paper_embedding": {
+    "status": "not_verified",
+    "reason": "缩至论文版心时副标题/图例偏小，需调整布局或拆图；未进行 Word 实际插图测试"
+  },
+  "whole_skill_behaviorally_validated": false
+}

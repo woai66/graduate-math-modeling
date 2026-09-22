@@ -1,84 +1,78 @@
-version: 0.1.0
+version: 0.5.0-draft
 name: huawei-math-modeling
 language: zh-CN
 scope: 中国研究生数学建模竞赛（华为杯）
-source_materials:
-  - 2023—2025 年赛题分类与项目根目录 README.md
-  - 本地 2025 优秀论文和重点学习优秀论文的结构抽查
-  - 视频第 9 集 Huawei-math-modeling v0.2.3 的阶段路由
-  - woai66/math-modeling-skill 与 jihe520/MathModelAgent 的公开工作流设计
-stages:
-  problem_reading:
-    load:
-      - references/problem-routing.md
-    outputs:
-      - 题目分析报告.md
-      - 模型候选与选型.md
-      - 数据字典.md
-  data_analysis:
-    load:
-      - references/data-analysis.md
-    outputs:
-      - 数据清洗记录.md
-      - figures/raw/
-      - figures/process/
-  modeling:
-    load:
-      - references/algorithm-catalog.md
-    outputs:
-      - 模型说明.md
-      - code/
-      - results/
-  validation:
-    load:
-      - references/quality-gates.md
-    outputs:
-      - results/复现清单.json
-      - VERIFY_REPORT.md
-  paper:
-    load:
-      - references/paper-style.md
-      - references/docx-checks.md
-    outputs:
-      - paper/
-      - 论文草稿.md 或 基线实验报告.docx
-  independent_review:
-    load:
-      - references/excellent-paper-rubric.md
-      - references/stage-contracts.md
-      - references/evidence-chain.md
-    outputs:
-      - REVIEW_REPORT.md
-      - VERIFY_REPORT.md
-  submission_package:
-    load:
-      - references/official-rules-checklist.md
-      - references/quality-gates.md
-    outputs:
-      - submission_package/
-tools:
-  repro_manifest: scripts/build_repro_manifest.py
-  docx_typography: scripts/verify_docx_typography.py
-  docx_math: scripts/verify_docx_math.py
-  docx_figures: scripts/verify_docx_figures.py
-  stage_gate: scripts/check_stage_gate.py
-  submission_readiness: scripts/verify_submission_readiness.py
-  docx_structure: scripts/verify_docx_structure.py
-  evidence_matrix: scripts/validate_evidence_matrix.py
-templates:
-  plan: templates/plan.yaml
-  stage_status: templates/stage_status.json
-  result_contract: templates/result_contract.json
-  evidence_matrix: templates/evidence_matrix.csv
-  todo: templates/todo.md
-  content_quota: references/content-quota.yaml
-gates:
-  required:
-    - 每个子问题有模型、参数、结果和验证
-    - 代码、图表、公式和结论一致
-    - 输入哈希和运行命令已记录
-    - 无占位符、密钥、个人信息和内部绝对路径
-  enhanced:
-    - 敏感性或鲁棒性分析
-    - 替代模型或基线对比
-    - DOCX/PDF 结构和视觉检查
+lifecycle: format_and_compliance_documented_tooling_partial
+behaviorally_validated: false
+full_contest_solution: not_verified
+collaboration_mode: discuss_then_implement_agreed_scope
+human_decisions:
+  - 选题与所求问题的解释
+  - 核心概念的可计算定义及创新主张
+  - 建模与实验方案以及重大路线变更
+  - 对 AI 提出的反对意见和替代路线的取舍
+active_resources:
+  entrypoint: SKILL.md
+  resource_index: references/README.md
+  requirements_and_process: references/rebuild-spec.md
+  simulation_training: references/simulation-training.md
+  stage_contracts: references/stage-contracts.md
+  official_rules: references/official-rules-checklist.md
+  toolchain_and_open_source: references/toolchain-and-open-source.md
+  novelty_and_dialectics: references/novelty-and-dialectics.md
+  excellent_paper_deconstruction: references/excellent-paper-deconstruction.md
+  paper_writing: references/paper-writing.md
+  paper_formatting: references/paper-formatting.md
+  ai_compliance: references/ai-compliance.md
+  evidence_chain: references/evidence-chain.md
+  quality_review: references/excellent-paper-rubric.md
+  diagram_workflow: references/diagram-workflow.md
+  diagram_example: assets/excalidraw-award-style-demo.excalidraw
+  diagram_acceptance: assets/excalidraw-award-style-demo.review.json
+  discussion_diagram_example: assets/modeling-process.workflow.json
+  latex_template: templates/latex/main.tex
+default_tools:
+  paper_flowchart_demo: scripts/excalidraw_award_style_demo.js
+  paper_flowchart_simple_demo: scripts/excalidraw_simple_flow.js
+  paper_flowchart_word_demo: scripts/build_excalidraw_word_demo.py
+  discussion_flowchart_export: scripts/export_flowchart.mjs
+  paper_text_extraction: scripts/extract_paper_text.py
+  reproduction_manifest: scripts/build_repro_manifest.py
+  evidence_matrix_check: scripts/validate_evidence_matrix.py
+  docx_format_check: scripts/verify_docx_format.py
+  docx_light_checks: scripts/verify_docx_typography.py
+retired_resources:
+  location: _archive/
+  policy: 历史归档，只用于追溯；不作为规则、模板或验收依据，不参与任何通过判定
+  examples:
+    - _archive/references/content-quota.yaml
+    - _archive/references/quality-gates.md
+    - _archive/scripts/verify_submission_readiness.py
+    - _archive/scripts/verify_docx_structure.py
+capability_status:
+  flowchart: excalidraw_local_example_verified
+  excalidraw_editing: obsidian_native_edit_verified
+  excalidraw_export: svg_png_verified
+  paper_figure_embedding: wps_docx_single_page_verified
+  official_2026_rules: verified_2026-09-22_with_hashes
+  paper_formatting_spec: documented_from_official_annex2
+  ai_usage_policy: documented_from_official_annex4
+  docx_format_checker: exercised_on_real_drafts
+  microsoft_word_rendering: not_verified
+  latex_template_compile: not_verified_no_tex_distribution
+  open_source_version_audit: not_verified
+  simulation_training: workflow_ready_not_yet_run
+  full_contest_solution: not_verified
+  excellent_paper_deconstruction: seven_local_papers_read_2026-09-22
+  novelty_protocol: documented_not_yet_practiced_in_full_contest
+legacy_policy:
+  status: retained_for_audit_only
+  auto_load: false
+  results_are_acceptance_evidence: false
+release_requirements:
+  - 新检查器通过实际故障正例与负例测试
+  - 至少一套仿真训练完成题目卡、讨论记录、最小实验、验证和复盘
+  - 真实赛题单问完成数据到 Word 的闭环
+  - 完整赛题全部任务及附件通过检查
+  - 未参与调优的迁移案例及独立审阅通过
+  - 安装副本与验收过的源码版本一致

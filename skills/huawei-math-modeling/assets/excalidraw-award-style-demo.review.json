@@ -1,0 +1,97 @@
+{
+  "reviewed_on": "2026-09-21",
+  "scope": "用户参考图风格的可编辑论文流程图工具测试，不验证园林模型",
+  "native_scene": {
+    "elements": 106,
+    "rectangles": 42,
+    "texts": 41,
+    "outline_arrows_and_lines": 8,
+    "bound_arrows": 15,
+    "text_container_links_valid": true,
+    "all_elements_editable": true
+  },
+  "obsidian": {
+    "version": "1.13.7",
+    "plugin_version": "2.26.4",
+    "opened_and_rendered": true,
+    "edit_test": "修改中文标签，移动子节点，保留元素 ID；见 edit-check.json"
+  },
+  "exports": {
+    "engine": "ExcalidrawAutomate",
+    "svg": [
+      1128,
+      1360
+    ],
+    "png": [
+      3384,
+      4080
+    ],
+    "reviewed_static_scene": "excalidraw-award-style-demo.excalidraw",
+    "live_editable_file": "excalidraw-award-style-demo.excalidraw.md",
+    "note": "活动画布允许后续手工编辑；本次 PNG 和 DOCX 对应固定交换源图快照。"
+  },
+  "word": {
+    "docx_created": true,
+    "image_width_cm": 16,
+    "effective_dpi": 537.21,
+    "smallest_label_pt": 9.65,
+    "canonical_renderer": "render_docx.py attempted; unavailable soffice.exe",
+    "actual_renderer": "WPS Writer 12.1.0.28488 via Word-compatible COM",
+    "pdf_rasterizer": "bundled Poppler pdftoppm 160 dpi",
+    "pages": 1,
+    "visually_reviewed_pages": [
+      1
+    ],
+    "visual_result": "中文可读；无文字重叠、裁切、异常换行；图与图题同页；标题底线已移除",
+    "microsoft_word_compatibility": "not_tested",
+    "cleanup_note": "PDF 已成功输出；关闭 COM 时出现 RPC 不可用警告；已核对实际 PDF 与 PNG。",
+    "image_sha256": "52ada3658021c738f7a529ff0924351e681a5f547f525156fb9778ba9af85100"
+  },
+  "fixed_issues": [
+    "中文容器宽度不足导致意外换行",
+    "第三方画布修改后列内对齐调整并保留修订前快照",
+    "插件保存与导出在同一调用中可能读取旧文件，新增保存一致性检查",
+    "WPS 标题样式继承蓝色底线，已设置显式 nil 边框"
+  ],
+  "remaining_limits": [
+    "SVG 跨机器中文字体尚未测试",
+    "新图仍须按具体内容检查布局",
+    "用户视觉偏好待反馈"
+  ],
+  "hashes": {
+    "excalidraw-award-style-demo.excalidraw": "def8d37804a97c3bc3810ff92a2684a3efd56d04fd91f9ee5f1b3be827e3f367",
+    "excalidraw-award-style-demo.svg": "ac9b77effe7d48e86cf2e83f172ee5347dc88d25905fab53ef9d0f9a272a4bf2",
+    "excalidraw-award-style-demo.png": "52ada3658021c738f7a529ff0924351e681a5f547f525156fb9778ba9af85100",
+    "excalidraw-award-style-demo-word.docx": "57b78d59d1fe4b53848acba968216434d677769d5859fc87c560c4ca388b776e",
+    "word.pdf": "96bfe0f1df9a8046812d64ab81eb75946b291a9eb161935772d7ed98a6c6fe24",
+    "page-1.png": "89c4a961ab958704c186ee9ed46fe900c7944c0736022d864560ac01665109e7",
+    "excalidraw-award-style-demo.recolor-check.json": "f8aa12e8299fe9611d68cf3bfb0a5a37e2443d3978f6e7341f672f39fcd1e8e2"
+  },
+  "palette": {
+    "scheme": "NPG (Nature Publishing Group) low-saturation",
+    "source": "ggsci NPG 十色方案，去饱和后用于论文插图",
+    "structure": "#3C5488",
+    "data": "#4DBBD5",
+    "emphasis": "#B5534A",
+    "validation": "#00A087",
+    "summary": "#B09C85",
+    "aux": "#8491B4",
+    "ink": "#1A1A1A",
+    "panel_fills": [
+      "#EDF1F7",
+      "#FBEDEA",
+      "#E7F4F1"
+    ],
+    "applied_via": "scripts/excalidraw_award_style_demo.js 的 recolor 模式",
+    "elements_recolored": 106,
+    "element_ids_preserved": true,
+    "record": "excalidraw-award-style-demo.recolor-check.json"
+  },
+  "pipeline_landmine": "实测 Excalidraw 2.26.4：addElementsToView(save=true) 之后自动保存未必在检查窗口内落盘，必须先 setDirty() 再 await view.save()，否则导出的是旧图。脚本已用 flushSave 固化该步骤。",
+  "tutorial_update": {
+    "file": "Excalidraw_AI绘图教程_新版.docx",
+    "pages_rendered_and_reviewed": 3,
+    "note": "原 Excalidraw_AI绘图教程.docx 被 WPS 占用无法覆盖，新版另存为该文件。",
+    "sha256": "cc6a68fabd7da6cbe60297f970efd5c7cbfc98a07e5f83299a5478baba2be6da"
+  }
+}

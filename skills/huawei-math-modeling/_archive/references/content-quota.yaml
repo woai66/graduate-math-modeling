@@ -1,0 +1,10 @@
+status: retired_reference
+purpose: "历史配额审计记录，不参与当前 Skill 的通过判定"
+policy:
+  official_rules_first: true
+  fixed_word_count_gate: false
+  fixed_page_count_gate: false
+  fixed_figure_count_gate: false
+  fixed_reference_count_gate: false
+  sample_paper_counts_are_only_observations: true
+replacement: references/award-paper-profile.md

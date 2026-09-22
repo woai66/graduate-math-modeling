@@ -1,11 +1,68 @@
-# DOCX 检查入口
+# Word 论文格式检查
 
-生成 Word 论文后，若 Python 和 `python-docx` 可用，运行：
+字体、字号、行距是官方硬性要求，必须先过格式关再看内容。要求原文见 `paper-formatting.md`。
+
+## 第一层：自动检查
 
 ```powershell
-python "<SKILL_ROOT>\\scripts\\verify_docx_typography.py" "<PROJECT_ROOT>\\基线实验报告.docx"
-python "<SKILL_ROOT>\\scripts\\verify_docx_math.py" "<PROJECT_ROOT>\\基线实验报告.docx" --min-equations 1
-python "<SKILL_ROOT>\\scripts\\verify_docx_figures.py" "<PROJECT_ROOT>\\基线实验报告.docx" --min-figures 1 --min-explained 1
+python "<SKILL_ROOT>\\scripts\\verify_docx_format.py" "<PROJECT_ROOT>\\论文.docx"
+python "<SKILL_ROOT>\\scripts\\verify_docx_typography.py" "<PROJECT_ROOT>\\论文.docx"
+python "<SKILL_ROOT>\\scripts\\verify_docx_figures.py" "<PROJECT_ROOT>\\论文.docx" --min-figures 1 --min-explained 1
 ```
 
-这些脚本只做结构性预检，不能替代人工阅读、Word 打开检查和页面渲染。若依赖缺失，报告 `BLOCKED`，不要把未检查的文档称为已通过。
+`verify_docx_format.py` 读取 DOCX 的实际样式与页面设置，报告：
+
+- 纸张是否为 A4，各节页边距实际数值。
+- 页脚是否存在 PAGE 自动页码域；页眉是否有内容（官方要求无页眉）。
+- 首个非空段落（题目）是否为黑体三号 16 pt。
+- 一级标题是否为黑体四号 14 pt。
+- 正文段落是否为宋体小四 12 pt、单倍行距、西文 Times New Roman。
+- 正文中文字体、字号、行距的**实际分布**，便于看出是少数段落还是全局不对。
+
+它会把无中文且含代码符号的段落归为“代码”，不按正文标准判定。
+
+能说明什么：段落样式与页面设置是否符合官方要求。
+不能说明什么：公式是否可编辑、分页是否合理、图表位置是否美观、图内字号是否够大、参考文献是否真实。
+
+## 第二层：结构与内容预检
+
+`verify_docx_typography.py` 检查文档有无正文、摘要、关键词、参考文献、附录等基本板块。
+`verify_docx_figures.py` 统计图片数量，并粗略判断图后是否出现解释性文字。
+
+两者都只是提醒，不能替代人工阅读。
+
+## 第三层：公式检查
+
+官方要求公式可编辑，图片公式不合格。检查方法：
+
+1. 在 Word 中单击公式，能进入公式编辑状态即为可编辑。
+2. 或统计 `word/document.xml` 里的 `oMath` 节点数（注意不要把 `oMath` 与 `oMathPara` 相加，会重复计数）。
+3. 抽查所有公式的编号是否连续、按章组织，是否与正文引用一致。
+
+## 第四层：人工逐页检查
+
+自动检查通过不代表能交。定稿前必须：
+
+1. 用 Word 或 WPS 导出 PDF。
+2. 把 PDF 逐页渲染成图片后逐页查看，不能只看第一页。
+3. 核对：字体是否为宋体/黑体而非回退字体、分页是否把标题留在页尾、图表是否跨页断裂、公式是否显示正常、页码是否从摘要页连续、有无页眉。
+4. 与结果索引核对正文数字，确认没有过期数值。
+
+本机缺少 `soffice.exe`，因此不能用 LibreOffice 自动渲染；请用 Word/WPS 导出 PDF 后按上述方式检查，并记录所用软件版本。
+
+## 常见故障与修复
+
+| 现象 | 原因 | 修复 |
+| --- | --- | --- |
+| 全文行距 1.3 或 1.25 | 粘贴外部内容带入样式 | 全选正文 → 段落 → 行距设为单倍；检查样式表默认值 |
+| 题目 18 pt | 套了模板封面字号 | 把摘要页题目改为黑体三号 16 pt |
+| 一级标题 16 pt | 与题目字号混淆 | 一级标题改四号 14 pt |
+| 正文出现多套字号 | 手工格式化 | 统一改用“正文”样式，删掉直接格式 |
+| 页脚无页码 | 只手工写了数字或页脚被清空 | 插入页码域，居中，起始页为摘要页 |
+| 出现页眉 | 套用外部模板 | 删除页眉内容或取消“与上一节相同” |
+| 公式是图片 | 粘贴截图或从 PDF 截取 | 用公式编辑器重录，或从 LaTeX 转换 |
+| 图内文字太小 | 按原始像素判断可读性 | 缩放到论文最终宽度后重新检查，必要时放大字号重出图 |
+
+## 已归档、不要使用的脚本
+
+`verify_docx_structure.py`（假定固定四问并把附录计入正文）、`verify_docx_math.py`（重复计数公式容器）、`verify_submission_readiness.py`（读取手工 `PASSED` 状态）已移入 `_archive/scripts/`。它们的结果不构成验收依据。

@@ -1,0 +1,159 @@
+% !TeX program = xelatex
+% 华为杯研赛论文 LaTeX 模板（第二十三届 2026 格式规范）
+%
+% 编译顺序（必须用 XeLaTeX，不能用 pdflatex）：
+%   xelatex main.tex
+%   bibtex  main            % 仅在改用 BibTeX 文献时
+%   xelatex main.tex
+%   xelatex main.tex
+%
+% 官方硬性要求（见 references/paper-formatting.md）：
+%   题目三号黑体居中；一级标题四号黑体居中；其余汉字小四宋体；单倍行距；
+%   页码从摘要页起位于页脚中部；不得有页眉；不得出现身份信息。
+
+\documentclass[UTF8,a4paper,zihao=-4]{ctexart}
+
+% ---------- 页面 ----------
+\usepackage{geometry}
+\geometry{a4paper, top=2.5cm, bottom=2.5cm, left=3.0cm, right=3.0cm}
+
+% ---------- 行距：官方要求单倍 ----------
+\usepackage{setspace}
+\singlespacing
+
+% ---------- 标题格式：一级标题四号黑体居中 ----------
+\usepackage{titlesec}
+\titleformat{\section}{\centering\heiti\zihao{4}}{\thesection}{0.5em}{}
+\titleformat{\subsection}{\heiti\zihao{-4}}{\thesubsection}{0.5em}{}
+\titleformat{\subsubsection}{\heiti\zihao{-4}}{\thesubsubsection}{0.5em}{}
+\titlespacing*{\section}{0pt}{1.4ex plus .3ex}{0.9ex}
+\titlespacing*{\subsection}{0pt}{1.1ex plus .2ex}{0.6ex}
+\setcounter{secnumdepth}{3}
+
+% ---------- 图表与公式编号：按章编号，图题在下、表题在上 ----------
+\usepackage{caption}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb}
+\usepackage{array}
+\captionsetup{font=small, labelsep=quad, justification=centering}
+\captionsetup[figure]{position=below, skip=6pt}
+\captionsetup[table]{position=above, skip=6pt}
+\numberwithin{figure}{section}
+\numberwithin{table}{section}
+\numberwithin{equation}{section}
+
+% ---------- 页眉页脚：无页眉，页脚居中页码 ----------
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{\zihao{5}\thepage}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% ---------- 附录代码 ----------
+\usepackage{listings}
+\usepackage{xcolor}
+\lstset{
+  basicstyle=\ttfamily\zihao{5},
+  breaklines=true,
+  columns=flexible,
+  showstringspaces=false,
+  frame=none,
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{black},
+  commentstyle=\color{gray},
+}
+
+% ---------- 超链接（不影响打印） ----------
+\usepackage[hidelinks]{hyperref}
+
+% ============================================================
+\begin{document}
+
+% ---------- 摘要页：题目、摘要、关键词同页 ----------
+\begin{center}
+  {\heiti\zihao{3} 基于 XX 模型的 XX 问题研究}   % 题目：三号黑体居中
+\end{center}
+\vspace{1em}
+
+\begin{center}
+  {\heiti\zihao{4} 摘\quad 要}
+\end{center}
+
+% 摘要正文：小四宋体；含建模思路、主要方法、模型、结果与结论、创新点
+摘要正文。针对问题一，……。针对问题二，……。针对问题三，……。
+本文的创新点在于……。结论表明……。
+
+\vspace{0.6em}
+\noindent{\heiti 关键词：}{\songti 关键词一；关键词二；关键词三；关键词四}
+
+\newpage
+
+% ---------- 正文 ----------
+\section{问题重述}
+
+\subsection{问题背景}
+
+正文使用小四号宋体、单倍行距。所有汉字均为小四号宋体。
+
+\section{模型假设与符号说明}
+
+符号表建议使用三线表，见表~\ref{tab:symbols}。
+
+\begin{table}[htbp]
+  \centering
+  \caption{符号说明}
+  \label{tab:symbols}
+  \begin{tabular}{cll}
+    \toprule
+    符号 & 含义 & 单位 \\
+    \midrule
+    $x$        & 决策变量 & --- \\
+    $\rho$     & 密度     & kg/m$^3$ \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\section{问题一：模型建立与求解}
+
+行内公式写作 $E = mc^2$；独立公式按章编号，如式~\eqref{eq:sample}。
+
+\begin{equation}
+  \label{eq:sample}
+  \min_{\boldsymbol{x}} \; f(\boldsymbol{x}) \quad \text{s.t.} \quad
+  \boldsymbol{A}\boldsymbol{x} \le \boldsymbol{b}, \;
+  \boldsymbol{x} \ge \boldsymbol{0}
+\end{equation}
+
+式中 $f(\cdot)$ 为目标函数，$\boldsymbol{A}$ 为约束矩阵。
+
+图表必须在正文被引用并解释，例如图~\ref{fig:demo} 所示。
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.8\textwidth]{figures/demo.pdf}
+  \caption{示例结果图}
+  \label{fig:demo}
+\end{figure}
+
+\section{模型评价与推广}
+
+\section*{参考文献}
+\addcontentsline{toc}{section}{参考文献}
+
+% 官方三种表述方式：书籍 / 期刊 / 网上资源。
+% 正文引用用方括号，如 [1][3]；引用书籍必须指出页码。
+\begin{thebibliography}{99}
+  \bibitem{ref1} 姜启源，数学模型，北京：高等教育出版社，12-45，2011。
+  \bibitem{ref2} 王某，李某，基于改进遗传算法的路径规划，系统工程理论与实践，42(3)：512-521，2022。
+  \bibitem{ref3} 中国研究生数学建模竞赛组委会，竞赛章程，https://cpipc.acge.org.cn，2026年9月16日。
+\end{thebibliography}
+
+\appendix
+\section*{附录}
+
+源代码按题目要求另行提交竞赛系统；此处仅放必要的代码索引与说明。
+
+\end{document}

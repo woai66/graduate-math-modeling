@@ -1,0 +1,17 @@
+{
+  "source": "excalidraw-award-style-demo.excalidraw",
+  "source_sha256": "def8d37804a97c3bc3810ff92a2684a3efd56d04fd91f9ee5f1b3be827e3f367",
+  "image": "excalidraw-award-style-demo.png",
+  "image_sha256": "52ada3658021c738f7a529ff0924351e681a5f547f525156fb9778ba9af85100",
+  "docx": "excalidraw-award-style-demo-word.docx",
+  "docx_sha256": "57b78d59d1fe4b53848acba968216434d677769d5859fc87c560c4ca388b776e",
+  "image_pixels": [
+    3384,
+    4080
+  ],
+  "placement_width_cm": 16,
+  "placement_height_cm": 19.29078014184397,
+  "effective_dpi": 537.21,
+  "min_label_point_size": 9.649857597587534,
+  "render_review": "pending"
+}

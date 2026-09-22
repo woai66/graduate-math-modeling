@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "status": "exported_pending_visual_review",
+  "source_html": "modeling-process.html",
+  "source_html_sha256": "80f3d55551459f318b3167c9bbc14ba5883880fa6edd0449e4d01b4cadf89317",
+  "specification_sha256": "b377c0a547d92803fc094f656c46e714b42b9683a976d622cfe3b3d4c1707096",
+  "theme": {
+    "png": "light",
+    "svg": "archify_dual_theme"
+  },
+  "exports": [
+    {
+      "format": "svg",
+      "file": "modeling-process.svg",
+      "sha256": "3f874aa56e1330ec48005d5e5070669559ba92ebd3d164e69ce06480d5d8c546",
+      "bytes": 50111
+    },
+    {
+      "format": "png",
+      "file": "modeling-process.png",
+      "sha256": "f5d0d3ed1e18acf5005b5a2e54752fdba2366009a1358182fac7d132aa70619b",
+      "bytes": 297332,
+      "width": 2880,
+      "height": 1600,
+      "maxWidthCmAt300Dpi": 24.38
+    }
+  ],
+  "limitations": [
+    "导出不等于视觉验收。",
+    "SVG 随主题变化；正式 Word 插图使用已检查的浅色 PNG 或另行验证 SVG 兼容性。",
+    "尚未验证目标 Word 版本与实际论文版面。"
+  ]
+}

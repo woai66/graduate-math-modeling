@@ -1,0 +1,19 @@
+{
+  "exportedAt": "2026-09-21T15:01:17.333Z",
+  "source": "20_学习/研究生数模竞赛/skills/huawei-math-modeling/assets/excalidraw-paper-flow.excalidraw.md",
+  "renderer": "Obsidian ExcalidrawAutomate",
+  "pluginVersion": "2.26.4",
+  "svgMethod": "createSVG(savedDrawingPath, true, ...)",
+  "pngMethod": "createPNG(savedDrawingPath, 3, ...)",
+  "pngScale": 3,
+  "elementCount": 27,
+  "types": {
+    "rectangle": 7,
+    "text": 10,
+    "diamond": 1,
+    "arrow": 9
+  },
+  "svgWidth": "818",
+  "svgHeight": "898",
+  "nativeArrowBindings": true
+}

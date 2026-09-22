@@ -1,0 +1,20 @@
+{
+  "source": "20_学习/研究生数模竞赛/skills/huawei-math-modeling/assets/excalidraw-simple-flow.excalidraw.md",
+  "engine": "ExcalidrawAutomate.createSVG/createPNG",
+  "pluginVersion": "2.26.4",
+  "exportedAt": "2026-09-21T15:03:57.289Z",
+  "elements": 27,
+  "typeCounts": {
+    "rectangle": 7,
+    "text": 10,
+    "diamond": 1,
+    "arrow": 9
+  },
+  "everyArrowBound": true,
+  "svgSize": [
+    968,
+    932
+  ],
+  "pngScale": 3,
+  "palette": "NPG (Nature Publishing Group) low-saturation"
+}

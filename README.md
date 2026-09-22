@@ -3,6 +3,20 @@
 
 这是我参加中国研究生数学建模竞赛的长期学习、建模、编程与论文写作仓库，也是与 Codex 协作的工作目录。仓库记录可复现的代码、实验结果、建模思路和竞赛过程；原始资料、论文合集和大型压缩包保存在独立的资料目录中。
 
+数模 Skill 当前为 `0.5.0-draft`：[完整工作规范](skills/huawei-math-modeling/references/rebuild-spec.md) · [资料索引](skills/huawei-math-modeling/references/README.md)。旧配额、固定四问和手工 `PASSED` 门禁已退出现行流程并归档到 `skills/huawei-math-modeling/_archive/`。
+
+第二十三届（2026）官方附件 1—4 已核验并记录哈希：[论文排版规范](skills/huawei-math-modeling/references/paper-formatting.md)（题目三号黑体居中、一级标题四号黑体居中、其余汉字小四宋体、单倍行距、页脚居中页码、无页眉）· [AI 使用与标注合规](skills/huawei-math-modeling/references/ai-compliance.md) · [官方规则核验表](skills/huawei-math-modeling/references/official-rules-checklist.md) · [Word 格式检查](skills/huawei-math-modeling/references/docx-checks.md) · [LaTeX 模板](skills/huawei-math-modeling/templates/latex/main.tex)。
+
+论文流程图接入：[操作与验收规范](skills/huawei-math-modeling/references/diagram-workflow.md) · [复杂示例源图](skills/huawei-math-modeling/assets/excalidraw-award-style-demo.excalidraw) · [最小示例源图](skills/huawei-math-modeling/assets/excalidraw-simple-flow.excalidraw.md)。
+
+创新与参考：[创新与辩证思考规程](skills/huawei-math-modeling/references/novelty-and-dialectics.md) · [优秀论文解剖](skills/huawei-math-modeling/references/excellent-paper-deconstruction.md) · [论文写作规范](skills/huawei-math-modeling/references/paper-writing.md)。
+
+过渡期按 [仓库工作规范](AGENTS.md) 显式使用仓库版 Skill；电脑中的旧安装副本暂未替换。
+
+协作方式为“讨论选题与题意 → 共同论证创新方案 → 分步建模、编程和核验 → 贯通结果 → 定稿论文”。科学图表由数据与代码生成，关键方案由队伍与 AI 共同讨论确定，详见新规范第 0、5.4 和 8.4 节。
+
+今天的仿真训练从 [2025 D 题启动记录](projects/2025-D/reports/SIMULATION_KICKOFF_2026-09-22.md) 开始；流程、阶段合同和运行记录模板分别见 [simulation-training.md](skills/huawei-math-modeling/references/simulation-training.md)、[stage-contracts.md](skills/huawei-math-modeling/references/stage-contracts.md) 和 [simulation_run.yaml](skills/huawei-math-modeling/templates/simulation_run.yaml)。
+
 ## 竞赛简介
 
 研究生数学建模竞赛强调面向真实问题的综合解决能力。相比只追求公式或程序的练习，研究生赛题通常更重视问题抽象、工程理解、数据分析、模型深度和论文完整性。
@@ -94,47 +108,47 @@
 
 ### 2023 年
 
-| 题目 | 主分类 | 兼有类型 |
-| --- | --- | --- |
+| 题目                | 主分类  | 兼有类型      |
+| ----------------- | ---- | --------- |
 | A WLAN 网络信道接入机制建模 | 仿真图论 | 优化调度、排队分析 |
-| B DFT 类矩阵的整数分解逼近 | 优化调度 | 数值计算 |
-| C 大规模创新类竞赛评审方案研究 | 评价决策 | 统计分析 |
-| D 区域双碳目标与路径规划研究 | 优化调度 | 预测、评价决策 |
-| E 出血性脑卒中临床智能诊疗建模 | 分类识别 | 预测、特征分析 |
-| F 强对流降水临近预报 | 预测 | 时空分析、分类识别 |
+| B DFT 类矩阵的整数分解逼近  | 优化调度 | 数值计算      |
+| C 大规模创新类竞赛评审方案研究  | 评价决策 | 统计分析      |
+| D 区域双碳目标与路径规划研究   | 优化调度 | 预测、评价决策   |
+| E 出血性脑卒中临床智能诊疗建模  | 分类识别 | 预测、特征分析   |
+| F 强对流降水临近预报       | 预测   | 时空分析、分类识别 |
 
 ### 2024 年
 
-| 题目 | 主分类 | 兼有类型 |
-| --- | --- | --- |
-| A 风电场有功功率优化调度 | 优化调度 | 预测、疲劳评估 |
-| B WLAN 组网中网络吞吐量建模 | 预测 | 回归、仿真 |
-| C 数据驱动下磁性元件的磁芯损耗建模 | 预测 | 回归、特征分析 |
-| D 大数据驱动的地理综合问题 | 预测 | 评价决策、时空分析、分类识别 |
-| E 高速公路应急车道紧急启用模型 | 仿真图论 | 预测、优化调度、交通流分析 |
-| F X 射线脉冲星光子到达时间建模 | 仿真图论 | 预测、轨道计算、随机过程 |
+| 题目                 | 主分类  | 兼有类型           |
+| ------------------ | ---- | -------------- |
+| A 风电场有功功率优化调度      | 优化调度 | 预测、疲劳评估        |
+| B WLAN 组网中网络吞吐量建模  | 预测   | 回归、仿真          |
+| C 数据驱动下磁性元件的磁芯损耗建模 | 预测   | 回归、特征分析        |
+| D 大数据驱动的地理综合问题     | 预测   | 评价决策、时空分析、分类识别 |
+| E 高速公路应急车道紧急启用模型   | 仿真图论 | 预测、优化调度、交通流分析  |
+| F X 射线脉冲星光子到达时间建模  | 仿真图论 | 预测、轨道计算、随机过程   |
 
 ### 2025 年
 
-| 题目 | 主分类 | 兼有类型 |
-| --- | --- | --- |
-| A 通用神经网络处理器下的核内调度问题 | 优化调度 | 整数规划、启发式算法 |
-| B 无线通信系统链路速率建模 | 预测 | 回归、机器学习 |
-| C 围岩裂隙精准识别与三维模型重构 | 分类识别 | 图像处理、三维重构 |
-| D 低空湍流监测及最优航路规划 | 优化调度 | 预测、图论、风险评价 |
-| E 高速列车轴承智能故障诊断问题 | 分类识别 | 信号处理、特征提取、迁移学习 |
-| F 江南古典园林的美学特征建模 | 评价决策 | 多模态数据、聚类分析 |
+| 题目                  | 主分类  | 兼有类型           |
+| ------------------- | ---- | -------------- |
+| A 通用神经网络处理器下的核内调度问题 | 优化调度 | 整数规划、启发式算法     |
+| B 无线通信系统链路速率建模      | 预测   | 回归、机器学习        |
+| C 围岩裂隙精准识别与三维模型重构   | 分类识别 | 图像处理、三维重构      |
+| D 低空湍流监测及最优航路规划     | 优化调度 | 预测、图论、风险评价     |
+| E 高速列车轴承智能故障诊断问题    | 分类识别 | 信号处理、特征提取、迁移学习 |
+| F 江南古典园林的美学特征建模     | 评价决策 | 多模态数据、聚类分析     |
 
 ### 数量统计
 
-| 主分类 | 2023 | 2024 | 2025 | 三年合计 |
-| --- | ---: | ---: | ---: | ---: |
-| 评价决策 | 1 | 0 | 1 | 2 |
-| 预测 | 1 | 3 | 1 | 5 |
-| 优化调度 | 2 | 1 | 2 | 5 |
-| 分类识别 | 1 | 0 | 2 | 3 |
-| 仿真图论 | 1 | 2 | 0 | 3 |
-| 合计 | 6 | 6 | 6 | 18 |
+| 主分类  | 2023 | 2024 | 2025 | 三年合计 |
+| ---- | ---: | ---: | ---: | ---: |
+| 评价决策 |    1 |    0 |    1 |    2 |
+| 预测   |    1 |    3 |    1 |    5 |
+| 优化调度 |    2 |    1 |    2 |    5 |
+| 分类识别 |    1 |    0 |    2 |    3 |
+| 仿真图论 |    1 |    2 |    0 |    3 |
+| 合计   |    6 |    6 |    6 |   18 |
 
 ### 近年趋势与选题策略
 
@@ -225,3 +239,4 @@ uv run python reports/2025-C/code/make_report_figures.py
 - [ ] 补充 MATLAB / Python 环境与运行说明
 - [ ] 为 2026 年赛题建立独立的问题分析和实验目录
 - [ ] 形成可直接复用的论文写作清单
+

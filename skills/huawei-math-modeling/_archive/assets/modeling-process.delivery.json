@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "ok": true,
+  "command": "deliver",
+  "type": "workflow",
+  "input": "F:\\goodstudy\\zyq的知识库\\20_学习\\研究生数模竞赛\\skills\\huawei-math-modeling\\assets\\modeling-process.workflow.json",
+  "output": "F:\\goodstudy\\zyq的知识库\\20_学习\\研究生数模竞赛\\skills\\huawei-math-modeling\\assets\\modeling-process.html",
+  "specification": {
+    "sha256": "b377c0a547d92803fc094f656c46e714b42b9683a976d622cfe3b3d4c1707096",
+    "bytes": 3600
+  },
+  "artifact": {
+    "sha256": "80f3d55551459f318b3167c9bbc14ba5883880fa6edd0449e4d01b4cadf89317",
+    "bytes": 706173
+  },
+  "validation": {
+    "checksPassed": 9,
+    "checkCount": 9,
+    "compositionProfile": "showcase",
+    "compositionStatus": "pass",
+    "errors": 0,
+    "warnings": 0
+  }
+}

@@ -1,5 +1,7 @@
 # 2025 年研赛 C 题全流程总控提示词
 
+> 状态说明（2026-09-22）：本文件是 2025 C 题当时的总控提示词，保留作历史记录。其中引用的 `scripts/check_stage_gate.py` 和手工 `stage_status.json` 门禁已随 Skill 0.4.0 归档到 `skills/huawei-math-modeling/_archive/`，不再是现行流程。新任务请按 `skills/huawei-math-modeling/SKILL.md` 与 `references/stage-contracts.md` 执行。
+
 > 用法：将本文件作为后续 Codex/Agent 会话的总任务提示。每次继续工作时，先读取本文件、`plan.yaml`、`stage_status.json`、`question_matrix.yaml` 和当前阶段对应的 Skill 参考文件，再执行任务。
 
 ## 角色与总目标

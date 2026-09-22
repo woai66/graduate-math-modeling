@@ -1,0 +1,167 @@
+{
+  "schema_version": 1,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "数模研究与论文协作流程",
+    "locale": "zh-CN",
+    "quality_profile": "showcase",
+    "viewBox": [
+      720,
+      400
+    ],
+    "legend": {
+      "entries": {
+        "external": {
+          "label": "共同讨论"
+        },
+        "backend": {
+          "label": "计算与检验"
+        },
+        "database": {
+          "label": "可追溯结果"
+        },
+        "frontend": {
+          "label": "论文与图表"
+        }
+      }
+    }
+  },
+  "lanes": [
+    {
+      "id": "discussion",
+      "label": "共同讨论与确定方案"
+    },
+    {
+      "id": "research",
+      "label": "分步实施与论文交付"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "topic",
+      "lane": "discussion",
+      "col": 1,
+      "type": "external",
+      "label": "选题与解析题意",
+      "sublabel": "任务 · 概念 · 研究范围",
+      "width": 180,
+      "height": 58
+    },
+    {
+      "id": "data",
+      "lane": "discussion",
+      "col": 3,
+      "type": "backend",
+      "label": "数据初步核对",
+      "sublabel": "字段 · 单位 · 可行性",
+      "width": 142,
+      "height": 58
+    },
+    {
+      "id": "plan",
+      "lane": "discussion",
+      "col": 5,
+      "type": "external",
+      "label": "共同定方案",
+      "sublabel": "推导与验证",
+      "width": 106,
+      "height": 58
+    },
+    {
+      "id": "experiment",
+      "lane": "research",
+      "col": 5,
+      "type": "backend",
+      "label": "分步实验",
+      "sublabel": "核验后扩展",
+      "width": 106,
+      "height": 58
+    },
+    {
+      "id": "lineage",
+      "lane": "research",
+      "col": 3,
+      "type": "database",
+      "label": "贯通各问结果",
+      "sublabel": "版本 · 接口 · 复现",
+      "width": 142,
+      "height": 58
+    },
+    {
+      "id": "package",
+      "lane": "research",
+      "col": 1,
+      "type": "frontend",
+      "label": "论文审阅与交付",
+      "sublabel": "正文图表 · 全页检查",
+      "width": 180,
+      "height": 58
+    }
+  ],
+  "edges": [
+    {
+      "id": "topic-data",
+      "from": "topic",
+      "to": "data",
+      "role": "main"
+    },
+    {
+      "id": "data-plan",
+      "from": "data",
+      "to": "plan",
+      "role": "main"
+    },
+    {
+      "id": "plan-experiment",
+      "from": "plan",
+      "to": "experiment",
+      "role": "main",
+      "label": "方案明确",
+      "labelAt": [
+        625,
+        172
+      ]
+    },
+    {
+      "id": "experiment-lineage",
+      "from": "experiment",
+      "to": "lineage",
+      "role": "main"
+    },
+    {
+      "id": "lineage-package",
+      "from": "lineage",
+      "to": "package",
+      "role": "main"
+    },
+    {
+      "id": "experiment-plan",
+      "from": "experiment",
+      "to": "plan",
+      "label": "调整主线",
+      "variant": "dashed",
+      "role": "return",
+      "fromSide": "right",
+      "toSide": "right",
+      "route": "outside-right"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "研究决策与执行",
+      "items": [
+        "关键定义和模型路线共同决定",
+        "阶段内主动完成排错与核验"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "贯穿全过程",
+      "items": [
+        "同步记录推导与已验证的写作素材",
+        "科学图表和正文数字绑定结果版本"
+      ]
+    }
+  ]
+}
