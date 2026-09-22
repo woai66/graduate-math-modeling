@@ -14,6 +14,7 @@
 | 构思创新点、准备反方审阅 | `novelty-and-dialectics.md` |
 | 参考别人怎么建模、哪些坑不要踩 | `excellent-paper-deconstruction.md` |
 | 写正文、定大纲、控篇幅 | `paper-writing.md` |
+| **开始写论文：直接打开可填写骨架** | `templates/paper-skeleton.docx`，用法见 `templates/paper-skeleton-usage.md` |
 | **排版定稿：字体、字号、行距、页码、公式、图表、参考文献格式** | `paper-formatting.md` |
 | **AI 使用与标注合规（必读）** | `ai-compliance.md` |
 | 把结论绑定到结果、代码和图表 | `evidence-chain.md` |

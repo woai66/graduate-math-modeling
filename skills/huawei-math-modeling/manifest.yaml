@@ -31,6 +31,8 @@ active_resources:
   diagram_acceptance: assets/excalidraw-award-style-demo.review.json
   discussion_diagram_example: assets/modeling-process.workflow.json
   latex_template: templates/latex/main.tex
+  paper_skeleton: templates/paper-skeleton.docx
+  paper_skeleton_usage: templates/paper-skeleton-usage.md
 default_tools:
   paper_flowchart_demo: scripts/excalidraw_award_style_demo.js
   paper_flowchart_simple_demo: scripts/excalidraw_simple_flow.js
@@ -40,6 +42,7 @@ default_tools:
   reproduction_manifest: scripts/build_repro_manifest.py
   evidence_matrix_check: scripts/validate_evidence_matrix.py
   docx_format_check: scripts/verify_docx_format.py
+  paper_skeleton_builder: scripts/build_paper_skeleton.py
   docx_light_checks: scripts/verify_docx_typography.py
 retired_resources:
   location: _archive/
@@ -59,9 +62,10 @@ capability_status:
   paper_formatting_spec: documented_from_official_annex2
   ai_usage_policy: documented_from_official_annex4
   docx_format_checker: exercised_on_real_drafts
+  paper_skeleton: generated_and_word_verified
   tex_live_installation: installed_2026-09-22_user_prefix
   latex_template_compile: xelatex_verified_3_pages_fonts_embedded
-  microsoft_word_rendering: not_verified
+  microsoft_word_rendering: verified_word_2026_export_pdf_5_pages
   open_source_version_audit: not_verified
   simulation_training: workflow_ready_not_yet_run
   full_contest_solution: not_verified

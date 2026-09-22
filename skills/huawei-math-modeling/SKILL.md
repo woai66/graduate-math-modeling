@@ -58,4 +58,6 @@ metadata:
 
 TeX Live 2026 已安装到 `C:\Users\zyq\texlive\2026`，`templates/latex/main.tex` 已实际编译通过：题目黑体 16 pt、一级标题黑体 14 pt、正文宋体 12 pt、页脚页码居中，字体正确嵌入，摘要页为第 1 页、正文从第 2 页开始。
 
-仍未完成：Microsoft Word 原生渲染验证、完整赛题盲测和独立审阅。查看 [manifest.yaml](manifest.yaml) 和 [重做规范](references/rebuild-spec.md) 的状态，不得把资产存在或脚本运行成功当成科学验收。
+`templates/paper-skeleton.docx` 是可直接填写的论文骨架，样式、页边距、页码起始和章节结构都已按官方要求与优秀论文范式配好；已用 Microsoft Word 打开并导出 PDF 完成原生渲染验证（封面无页码、摘要页为第 1 页、正文第 2 页起）。用法见 [骨架使用说明](templates/paper-skeleton-usage.md)。
+
+仍未完成：完整赛题盲测和独立审阅。查看 [manifest.yaml](manifest.yaml) 和 [重做规范](references/rebuild-spec.md) 的状态，不得把资产存在或脚本运行成功当成科学验收。

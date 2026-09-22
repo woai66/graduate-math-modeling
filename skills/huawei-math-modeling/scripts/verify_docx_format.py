@@ -157,6 +157,12 @@ HEADING_PATTERNS = [
 
 SPECIAL_HEADINGS = {"摘要", "关键词", "参考文献", "附录", "目录", "问题重述", "模型假设", "符号说明"}
 
+HEADING_STYLE_RE = re.compile(r"^(heading|标题)\s*([1-9])$", re.IGNORECASE)
+TITLE_STYLE_NAMES = {"论文题目", "论文标题", "题目"}
+COVER_STYLE_NAMES = {"封面标题", "封面副标题"}
+REFERENCE_STYLE_NAMES = {"参考文献条目", "参考文献"}
+NOTE_STYLE_NAMES = {"提示", "填写提示", "批注"}
+
 CJK_RE = re.compile(r"[\u4e00-\u9fff]")
 CODE_HINT_RE = re.compile(r"[{};=<>\[\]]|^\s{2,}\S")
 
@@ -177,17 +183,22 @@ def classify(paragraph) -> str:
     lower = name.lower()
     if not text:
         return "empty"
+    if name in TITLE_STYLE_NAMES:
+        return "title"
+    if name in COVER_STYLE_NAMES:
+        return "cover"
+    if name in REFERENCE_STYLE_NAMES:
+        return "reference"
+    if name in NOTE_STYLE_NAMES:
+        return "note"
     if "caption" in lower or "题注" in name:
         return "caption"
     if "代码" in name or "code" in lower or "preformatted" in lower:
         return "code"
-    if lower.startswith("heading") or "标题" in name:
-        level = 1
-        for ch in lower:
-            if ch.isdigit():
-                level = int(ch)
-                break
-        return f"heading{level}"
+    # 只有规范命名的标题样式才算标题；封面标题、论文题目等自定义样式按各自规则处理
+    heading_match = HEADING_STYLE_RE.match(name.strip())
+    if heading_match:
+        return f"heading{int(heading_match.group(2))}"
     if len(text) <= 30 and (text.startswith("图") or text.startswith("表")):
         return "caption"
     # 未使用标题样式但结构上属于标题的段落
@@ -215,6 +226,7 @@ def main() -> int:
     notes: list[str] = []
 
     # 页面设置
+    page_field_sections = [i for i, s in enumerate(doc.sections, 1) if has_page_field(s.footer)]
     for index, section in enumerate(doc.sections, 1):
         width_mm = section.page_width.mm if section.page_width else 0
         height_mm = section.page_height.mm if section.page_height else 0
@@ -249,7 +261,10 @@ def main() -> int:
             problems.append(f"第 {index} 节页眉有内容；官方要求不得有页眉")
         footer = section.footer
         if not has_page_field(footer):
-            problems.append(f"第 {index} 节页脚未检测到 PAGE 页码域；官方要求页脚中部自动页码")
+            if index == 1 and len(doc.sections) > 1 and page_field_sections:
+                notes.append(f"第 {index} 节页脚无页码域（封面不编号，符合规范）")
+            else:
+                problems.append(f"第 {index} 节页脚未检测到 PAGE 页码域；官方要求页脚中部自动页码")
 
     # 段落格式
     body_total = 0
@@ -259,10 +274,14 @@ def main() -> int:
     body_fonts: collections.Counter = collections.Counter()
     body_sizes: collections.Counter = collections.Counter()
     body_spacings: collections.Counter = collections.Counter()
+    skipped_styles: collections.Counter = collections.Counter()
     samples: list[str] = []
     for paragraph in doc.paragraphs:
         kind = classify(paragraph)
         if kind == "empty":
+            continue
+        if kind in ("cover", "reference", "caption", "code", "note"):
+            skipped_styles[kind] += 1
             continue
         ea, ascii_, size = effective_format(paragraph)
         ls = line_spacing(paragraph)
@@ -300,19 +319,44 @@ def main() -> int:
                     samples.append(
                         f"[一级标题字号] 期望四号 14 pt，实际 {size if size else '未设置'}：{snippet}"
                     )
+        elif kind == "title":
+            if ea not in FONT_HEI:
+                problems.append(f"论文题目期望黑体三号，实际字体 {ea or '未显式设置'}")
+            if size is None or abs(size - SIZE_TITLE) > 0.2:
+                problems.append(f"论文题目期望三号 16 pt，实际 {size if size else '未设置'}")
 
-    # 题目段落：取首个非空段落
-    first_text = next((p for p in doc.paragraphs if p.text.strip()), None)
-    if first_text is not None:
-        ea, _, size = effective_format(first_text)
-        if ea not in FONT_HEI:
-            problems.append(f"首个非空段落（题目）期望黑体三号，实际字体 {ea or '未显式设置'}")
-        if size is None or abs(size - SIZE_TITLE) > 0.2:
-            problems.append(f"首个非空段落（题目）期望三号 16 pt，实际 {size if size else '未设置'}")
+    # 没有“论文题目”样式时，退回到首个非空段落
+    if not any(p.text.strip() and style_name(p) in TITLE_STYLE_NAMES for p in doc.paragraphs):
+        first_text = next((p for p in doc.paragraphs if p.text.strip()), None)
+        if first_text is not None:
+            ea, _, size = effective_format(first_text)
+            if ea not in FONT_HEI:
+                problems.append(f"首个非空段落（题目）期望黑体三号，实际字体 {ea or '未显式设置'}")
+            if size is None or abs(size - SIZE_TITLE) > 0.2:
+                problems.append(f"首个非空段落（题目）期望三号 16 pt，实际 {size if size else '未设置'}")
 
     print(f"文件: {args.docx.name}")
     for note in notes:
         print("  " + note)
+
+    # 正文段落为空时（例如空白骨架），退回到检查 Normal 样式定义
+    if body_total == 0:
+        normal = doc.styles["Normal"]
+        ea, ascii_, size = None, None, None
+        rpr = normal.element.rPr
+        if rpr is not None and rpr.rFonts is not None:
+            ea = rpr.rFonts.get(qn("w:eastAsia"))
+            ascii_ = rpr.rFonts.get(qn("w:ascii"))
+        if normal.font.size is not None:
+            size = normal.font.size.pt
+        print("  未发现正文段落，改为检查 Normal 样式定义")
+        if ea not in FONT_SONG:
+            problems.append(f"Normal 样式期望宋体，实际 {ea or '未设置'}")
+        if size is None or abs(size - SIZE_BODY) > 0.2:
+            problems.append(f"Normal 样式期望小四 12 pt，实际 {size if size else '未设置'}")
+        if ascii_ and ascii_ not in FONT_WEST:
+            problems.append(f"Normal 样式西文期望 Times New Roman，实际 {ascii_}")
+
     print(
         "正文段落统计: 检查 {n} 段；字体不符 {f}；字号不符 {s}；行距不符 {sp}".format(
             n=body_total, f=body_bad_font, s=body_bad_size, sp=body_bad_spacing
@@ -322,6 +366,12 @@ def main() -> int:
         print("  正文中文字体分布: " + "，".join(f"{k}×{v}" for k, v in body_fonts.most_common(5)))
         print("  正文字号分布(pt): " + "，".join(f"{k}×{v}" for k, v in body_sizes.most_common(5)))
         print("  正文行距分布: " + "，".join(f"{k}×{v}" for k, v in body_spacings.most_common(5)))
+    if skipped_styles:
+        print(
+            "  按专用规则跳过: "
+            + "，".join(f"{k}×{v}" for k, v in skipped_styles.most_common())
+            + "（封面、参考文献、图表题注、代码各有自己的字号要求）"
+        )
     for item in samples:
         print("  - " + item)
     if problems:
