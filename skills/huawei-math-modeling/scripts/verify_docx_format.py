@@ -166,6 +166,11 @@ NOTE_STYLE_NAMES = {"提示", "填写提示", "批注"}
 CJK_RE = re.compile(r"[\u4e00-\u9fff]")
 CODE_HINT_RE = re.compile(r"[{};=<>\[\]]|^\s{2,}\S")
 
+# 封面与摘要页沿用官方模板字体（华文新魏/隶书），不按正文字体判定
+FRONT_MATTER_RE = re.compile(
+    r"^(中国研究生创新实践系列大赛|“?华为杯”?第.{1,6}届|数学建模竞赛|题\s*目|摘\s*要|关\s*键\s*词)"
+)
+
 
 def looks_like_code(text: str) -> bool:
     """附录代码通常无中文、含缩进或典型符号，单独归类避免误判正文字号。"""
@@ -191,6 +196,8 @@ def classify(paragraph) -> str:
         return "reference"
     if name in NOTE_STYLE_NAMES:
         return "note"
+    if FRONT_MATTER_RE.match(re.sub(r"\s+", "", text)) or FRONT_MATTER_RE.match(text):
+        return "front"
     if "caption" in lower or "题注" in name:
         return "caption"
     if "代码" in name or "code" in lower or "preformatted" in lower:
@@ -280,7 +287,7 @@ def main() -> int:
         kind = classify(paragraph)
         if kind == "empty":
             continue
-        if kind in ("cover", "reference", "caption", "code", "note"):
+        if kind in ("cover", "reference", "caption", "code", "note", "front"):
             skipped_styles[kind] += 1
             continue
         ea, ascii_, size = effective_format(paragraph)
@@ -325,15 +332,32 @@ def main() -> int:
             if size is None or abs(size - SIZE_TITLE) > 0.2:
                 problems.append(f"论文题目期望三号 16 pt，实际 {size if size else '未设置'}")
 
-    # 没有“论文题目”样式时，退回到首个非空段落
+    # 没有“论文题目”样式时，退回到第一段非封面文字
     if not any(p.text.strip() and style_name(p) in TITLE_STYLE_NAMES for p in doc.paragraphs):
-        first_text = next((p for p in doc.paragraphs if p.text.strip()), None)
+        skip_kinds = {"empty", "front", "cover", "note", "caption", "code", "reference", "title"}
+        skip_prefixes = ("heading",)
+        first_text = next(
+            (
+                p
+                for p in doc.paragraphs
+                if p.text.strip()
+                and classify(p) not in skip_kinds
+                and not classify(p).startswith(skip_prefixes)
+            ),
+            None,
+        )
         if first_text is not None:
             ea, _, size = effective_format(first_text)
             if ea not in FONT_HEI:
-                problems.append(f"首个非空段落（题目）期望黑体三号，实际字体 {ea or '未显式设置'}")
+                problems.append(
+                    f"首段正文标题期望黑体三号，实际字体 {ea or '未显式设置'}：{first_text.text.strip()[:24]}"
+                )
             if size is None or abs(size - SIZE_TITLE) > 0.2:
-                problems.append(f"首个非空段落（题目）期望三号 16 pt，实际 {size if size else '未设置'}")
+                problems.append(
+                    f"首段正文标题期望三号 16 pt，实际 {size if size else '未设置'}：{first_text.text.strip()[:24]}"
+                )
+        else:
+            notes.append("未找到题目段落（封面与摘要页按官方模板字体处理，不参与正文检查）")
 
     print(f"文件: {args.docx.name}")
     for note in notes:
