@@ -1,0 +1,4 @@
+interface:
+  display_name: "F题建模论文交付"
+  short_description: "复用F题四问模型边界、论文审查、技术路线图和版式验收经验"
+  default_prompt: "请使用 $f-modeling-paper-delivery，先核对2026年F题当前母版，再按任务审查、改写或制图；保留证据边界，涉及插图时完成版心检查。"

@@ -19,10 +19,11 @@ metadata:
 3. 进入数据/模型时按需读 `problem-routing.md`、`data-analysis.md`、`algorithm-catalog.md`、`evidence-chain.md`。
 4. 构思方案、审自己的方案时读 `novelty-and-dialectics.md`；需要参考别人怎么建模时读 `excellent-paper-deconstruction.md`。
 5. 写论文时读 `paper-writing.md` 和 `excellent-paper-rubric.md`；篇幅按论证负担和官方限制分配，不套固定字数。
-6. **排版定稿前必读 `paper-formatting.md`**：字体、字号、行距、页码、页眉、图表、公式、参考文献都是官方硬性要求。用 `docx-checks.md` 的脚本与人工流程逐层验收。
+6. **排版定稿前必读 `paper-formatting.md`**：核对字体、字号、行距、页码、页眉、图表、公式和参考文献，区分官方硬性要求、模板实测值和设计建议。用 `docx-checks.md` 的脚本与人工流程逐层验收。
 7. **任何 AI 参与的工作都要读 `ai-compliance.md`**：论文最终文字必须由队员用自己的语言表述，程序与数据分析须按规定标注工具信息，无来源的模型和公式一律不予认可。
 8. 做流程图和图表时读 `diagram-workflow.md`、`toolchain-and-open-source.md`。
 9. 正式参赛前读 `official-rules-checklist.md`，核对当届文件哈希、提交命名、识别码和附件限制。
+10. 接续 **2026 年 F 题**时按需读 [F 题案例经验](../f-modeling-paper-delivery/SKILL.md)。可迁移教训已归入上述写作、验证、制图和 Word 检查文件；新题不套用 F 题问数、变量、数字或文献数量。
 
 文件职责与任务路由见 [参考资料索引](references/README.md)。`_archive/` 是历史归档，只用于追溯，不作为规则、模板或验收依据。
 
@@ -34,6 +35,8 @@ metadata:
 - 任何数字、图表和结论都绑定输入哈希、运行版本、代码入口、参数和验证记录；没有证据的数字不能进入摘要和结论。
 - 无标签时不伪造 Accuracy、IoU、F1、真实概率或最优性；代理分数必须说明标定和适用边界。
 - 论文逐问回答题面，正文说明选模理由、变量、推导、参数、结果、比较、敏感性、工程含义和局限；同步维护证据矩阵。
+- 独立研究稿整合为全文时，逐项核对关键定义、推导、参数和验证的去向，不能压成只有模型名和结果的摘要。发现缺口，先补题面要求与科学证据，再统稿和排版；改成谨慎措辞不等于完成题目。
+- 接续先确认用户指定的当前母版及手工改动，再核对源文件与结果依赖；最新文件名或旧 manifest 不能自动决定母版。既有 Word 已成为母版时，不从旧 LaTeX、模板或备份重新覆盖。
 - 数值图由真实数据和代码生成；流程图保留 Excalidraw/Archify 可编辑源、导出文件和版心检查记录。
 - 使用 `uv` 管理 Python 环境。Git/gh 默认只读检查；未经用户明确授权不 commit、push、rebase、amend、建 PR 或发布，禁止 GitHub Contents API。
 - Word/PDF 必须对实际交付版本做结构检查和全页渲染；未测的 Word 版本、规则或附件要明确标记 `not_verified`。
