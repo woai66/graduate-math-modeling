@@ -14,6 +14,7 @@
 | 构思创新点、准备反方审阅 | `novelty-and-dialectics.md` |
 | 参考别人怎么建模、哪些坑不要踩 | `excellent-paper-deconstruction.md` |
 | 写正文、定大纲、控篇幅 | `paper-writing.md` |
+| 独立分问稿整合、摘要取舍、评委视角审查 | [paper-writing.md](paper-writing.md) 第八、九节；科学缺口先回到验证 |
 | **开始写论文：直接打开可填写骨架** | `templates/paper-skeleton.docx`，用法见 `templates/paper-skeleton-usage.md`；重新生成需指向本机官方附件3 模板 |
 | **排版定稿：字体、字号、行距、页码、公式、图表、参考文献格式** | `paper-formatting.md` |
 | **AI 使用与标注合规（必读）** | `ai-compliance.md` |
@@ -21,6 +22,8 @@
 | 定稿前质量审阅 | `excellent-paper-rubric.md` |
 | 做论文流程图、数值图、配色 | `diagram-workflow.md` |
 | 检查 Word 结构、公式、图表、字体 | `docx-checks.md` |
+| 接续用户手改稿、防止覆盖、核对当前母版 | [docx-checks.md](docx-checks.md) 的改稿前检查；[evidence-chain.md](evidence-chain.md) 的版本依赖 |
+| 复用 2026 年 F 题模型接口、审稿与路线图实例 | [F 题案例 skill](../../f-modeling-paper-delivery/SKILL.md)，仅按需读；不作为新题默认模型 |
 | 核对环境、Git/gh、外部工具借鉴边界 | `toolchain-and-open-source.md` |
 | 正式参赛前核对当届规则、模板、附件、AI 规范 | `official-rules-checklist.md` |
 | 查询完整工作规范的其他章节 | `rebuild-spec.md` |
@@ -34,13 +37,13 @@
 - `novelty-and-dialectics.md`：创新四问、反方审阅、反例优先、诚实命名、人机分工。
 - `excellent-paper-deconstruction.md`：七篇参考论文的逐篇解剖、可迁移范式与需警惕模式。
 - `excellent-paper-rubric.md`：定稿前的十维审阅表和红线项。
-- `paper-writing.md`：论文大纲、每问闭环写法、格式编号、篇幅预算原则。
+- `paper-writing.md`：论文大纲、每问闭环、分问整合、摘要与中文表达、评委视角审查。
 - `paper-formatting.md`：官方排版硬性要求、中文字号对照、样式体系、公式与图表规范、参考文献三种表述、LaTeX/Word 两条路线、定稿验收清单。
 - `ai-compliance.md`：官方 AI 使用规定、标注模板、项目日志要求、定稿检查与红线。
 - `evidence-chain.md`：主张、结果、图表、代码、参数和引用的绑定格式。
 - `problem-routing.md`、`data-analysis.md`、`algorithm-catalog.md`：题型路由、数据检查和方法候选。
 - `diagram-workflow.md`：Excalidraw 论文插图路线、NPG 配色、导出与验收。
-- `docx-checks.md`：Word 可用的结构预检脚本与人工检查要求。
+- `docx-checks.md`：当前母版保护、Word 结构预检、分页与全页人工检查要求。
 - `official-rules-checklist.md`：第二十三届官方附件1—4 的核验结果、文件哈希、提交链路与未核验项。
 - `toolchain-and-open-source.md`：本地工具状态、Git/gh 边界、外部开源项目借鉴范围。
 
